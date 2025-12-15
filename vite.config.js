@@ -3,17 +3,19 @@ import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-        tailwindcss(),
-    ],
+  plugins: [
+    laravel({
+      input: [
+        'resources/css/app.css',
+        'resources/js/app.js',
+        'resources/js/showPassword.js',
+      ],
+      refresh: true,
+    }),
+    tailwindcss(),
+  ],
 
-    preview: {
-        allowedHosts: [
-            'prethoracic-floutingly-brooklynn.ngrok-free.dev'
-        ]
-    }
+  preview: {
+    allowedHosts: ['prethoracic-floutingly-brooklynn.ngrok-free.dev'],
+  },
 });
