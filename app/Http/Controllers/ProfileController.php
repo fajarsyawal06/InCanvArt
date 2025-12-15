@@ -8,8 +8,8 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
@@ -21,21 +21,16 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        // Artwork milik user login
         $artworks = Artwork::visibleFor(Auth::user())
             ->where('user_id', $user->user_id)
             ->orderBy('tanggal_upload', 'desc')
             ->paginate(24);
 
-        // Potong deskripsi seperti di index artwork
         $this->truncateArtworkCollection($artworks);
 
-        // Profil user (auto buat jika belum ada)
         $profile = $this->getOrCreateProfile($user);
 
-        // orang yang mengikuti saya
         $followersCount = Follow::where('following_id', $user->user_id)->count();
-        // orang yang saya ikuti
         $followingCount = Follow::where('follower_id', $user->user_id)->count();
 
         return view('profiles.index', compact(
@@ -53,22 +48,21 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-
         $profile = $this->getOrCreateProfile($user);
 
-        // Pastikan kontak berupa array
         $kontak    = is_array($profile->kontak) ? $profile->kontak : [];
         $instagram = $kontak['instagram'] ?? '';
         $twitter   = $kontak['twitter'] ?? '';
         $facebook  = $kontak['facebook'] ?? '';
 
-        // URL foto profil & cover (butuh storage:link)
+        // Karena DB kita simpan sebagai URL publik (/storage/avatars/..),
+        // maka cukup pakai asset().
         $profileUrl = $profile->foto_profil
-            ? Storage::url($profile->foto_profil)
+            ? asset(ltrim($profile->foto_profil, '/'))
             : null;
 
         $coverUrl = $profile->foto_cover
-            ? Storage::url($profile->foto_cover)
+            ? asset(ltrim($profile->foto_cover, '/'))
             : null;
 
         return view('profiles.edit', compact(
@@ -102,18 +96,17 @@ class ProfileController extends Controller
 
         $profile = $this->getOrCreateProfile($user);
 
-        $fotoProfilPath = $profile->foto_profil;
-        $fotoCoverPath  = $profile->foto_cover;
+        $fotoProfilUrl = $profile->foto_profil; // contoh: /storage/avatars/xxx.jpg
+        $fotoCoverUrl  = $profile->foto_cover;  // contoh: /storage/covers/xxx.jpg
 
         /**
          * FOTO PROFIL (400x400)
          */
         if ($request->filled('cropped_foto_profil')) {
-            if ($fotoProfilPath && Storage::disk('public')->exists($fotoProfilPath)) {
-                Storage::disk('public')->delete($fotoProfilPath);
-            }
+            // hapus lama (fisik file)
+            $this->deleteByPublicUrl($fotoProfilUrl);
 
-            $saved = $this->saveBase64Image(
+            $savedUrl = $this->saveBase64ImageToPublicRoot(
                 $request->input('cropped_foto_profil'),
                 'avatars',
                 'ava_',
@@ -121,8 +114,8 @@ class ProfileController extends Controller
                 400
             );
 
-            if ($saved) {
-                $fotoProfilPath = $saved;
+            if ($savedUrl) {
+                $fotoProfilUrl = $savedUrl;
             }
         }
 
@@ -130,11 +123,9 @@ class ProfileController extends Controller
          * FOTO COVER (1600x400)
          */
         if ($request->filled('cropped_foto_cover')) {
-            if ($fotoCoverPath && Storage::disk('public')->exists($fotoCoverPath)) {
-                Storage::disk('public')->delete($fotoCoverPath);
-            }
+            $this->deleteByPublicUrl($fotoCoverUrl);
 
-            $saved = $this->saveBase64Image(
+            $savedUrl = $this->saveBase64ImageToPublicRoot(
                 $request->input('cropped_foto_cover'),
                 'covers',
                 'cover_',
@@ -142,8 +133,8 @@ class ProfileController extends Controller
                 400
             );
 
-            if ($saved) {
-                $fotoCoverPath = $saved;
+            if ($savedUrl) {
+                $fotoCoverUrl = $savedUrl;
             }
         }
 
@@ -160,8 +151,8 @@ class ProfileController extends Controller
         $profile->update([
             'nama_lengkap' => $request->nama_lengkap,
             'bio'          => $request->bio,
-            'foto_profil'  => $fotoProfilPath,
-            'foto_cover'   => $fotoCoverPath,
+            'foto_profil'  => $fotoProfilUrl,
+            'foto_cover'   => $fotoCoverUrl,
             'kontak'       => $kontak ?: null,
         ]);
 
@@ -177,10 +168,16 @@ class ProfileController extends Controller
     }
 
     /**
-     * Simpan base64 image ke storage/public dengan ukuran fix.
+     * Simpan base64 image ke folder publik ROOT (public_html/storage/{folder})
+     * dan return URL publik: /storage/{folder}/file.jpg
      */
-    protected function saveBase64Image(?string $base64, string $folder, string $prefix, int $width, int $height): ?string
-    {
+    protected function saveBase64ImageToPublicRoot(
+        ?string $base64,
+        string $folder,
+        string $prefix,
+        int $width,
+        int $height
+    ): ?string {
         if (!$base64) {
             return null;
         }
@@ -201,10 +198,33 @@ class ProfileController extends Controller
             })
             ->encode('jpg', 90);
 
-        $filename = $folder . '/' . uniqid($prefix, true) . '.jpg';
-        Storage::disk('public')->put($filename, (string) $image);
+        // Pastikan folder ada: public_html/storage/{folder}
+        $dir = base_path('storage/' . $folder);
+        if (!File::exists($dir)) {
+            File::makeDirectory($dir, 0755, true);
+        }
 
-        return $filename;
+        $filename = uniqid($prefix, true) . '.jpg';
+
+        // Simpan file fisik
+        File::put($dir . '/' . $filename, (string) $image);
+
+        // Return URL publik untuk disimpan ke DB
+        return '/storage/' . $folder . '/' . $filename;
+    }
+
+    /**
+     * Hapus file fisik berdasarkan URL publik (/storage/...)
+     */
+    protected function deleteByPublicUrl(?string $publicUrl): void
+    {
+        if (!$publicUrl) return;
+
+        // contoh: /storage/avatars/xxx.jpg -> public_html/storage/avatars/xxx.jpg
+        $fullPath = base_path(ltrim($publicUrl, '/'));
+        if (File::exists($fullPath)) {
+            File::delete($fullPath);
+        }
     }
 
     /**
@@ -212,30 +232,22 @@ class ProfileController extends Controller
      */
     public function show($userId)
     {
-        // 1. Ambil user pemilik profil
         $creator = User::where('user_id', $userId)->firstOrFail();
-
-        // 2. Profil pemilik
         $creatorProfile = $this->getOrCreateProfile($creator);
 
-        // 3. User yang sedang melihat profil
         $viewer = Auth::user();
 
-        // 4. Semua artwork milik creator, tetapi difilter sesuai moderasi
         $creatorArtworks = Artwork::with('kategori')
-            ->visibleFor($viewer)                      // Hormati moderasi
-            ->where('user_id', $creator->user_id)      // Pemilik profil
+            ->visibleFor($viewer)
+            ->where('user_id', $creator->user_id)
             ->orderByDesc('tanggal_upload')
             ->paginate(24);
 
-        // potong deskripsi
         $this->truncateArtworkCollection($creatorArtworks);
 
-        // 5. Hitung follower & following pemilik profil
         $creatorFollowersCount = Follow::where('following_id', $creator->user_id)->count();
         $creatorFollowingCount = Follow::where('follower_id', $creator->user_id)->count();
 
-        // 6. Viewer follow creator atau tidak
         $isFollowing = $viewer
             ? $viewer->isFollowing($creator)
             : false;
