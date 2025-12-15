@@ -11,64 +11,24 @@ use App\Models\Statistic;
 use App\Models\Moderation;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 
 class ArtworkController extends Controller
 {
-    // =========================
-    // Helper: folder & file ops
-    // =========================
-    private function artworksPublicDir(): string
-    {
-        // Simpan langsung ke: public/storage/artworks
-        return public_path('storage/artworks');
-    }
-
-    private function ensureArtworksPublicDirExists(): void
-    {
-        $dir = $this->artworksPublicDir();
-        if (!File::exists($dir)) {
-            File::makeDirectory($dir, 0755, true);
-        }
-    }
-
-    private function makeArtworkFilename(\Illuminate\Http\UploadedFile $file): string
-    {
-        $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
-        return (string) Str::uuid() . '.' . $ext;
-    }
-
-    private function publicUrlForArtwork(string $filename): string
-    {
-        // URL publik yang dipakai di browser
-        return '/storage/artworks/' . $filename;
-    }
-
-    private function deleteArtworkFileByUrl(?string $fileUrl): void
-    {
-        if (!$fileUrl) return;
-
-        // file_url format: /storage/artworks/xxxx.jpg
-        $fullPath = public_path(ltrim($fileUrl, '/')); // => public/storage/artworks/xxxx.jpg
-        if (File::exists($fullPath)) {
-            File::delete($fullPath);
-        }
-    }
-
-    // =====================
     // Menampilkan semua data
-    // =====================
     public function index()
     {
         $loginUser = Auth::user();
 
+        // Query utama: daftar artwork untuk halaman /artworks
         $artworks = Artwork::with(['kategori', 'user.profile'])
-            ->visibleFor($loginUser)
-            ->inRandomOrder()
-            ->orderByDesc('tanggal_upload')
+            ->visibleFor($loginUser)               // Hormati status moderasi
+            ->inRandomOrder()                      // Tetap random seperti keinginan awal
+            ->orderByDesc('tanggal_upload')        // Random + tertata fallback
             ->paginate(24);
 
+        // Potong deskripsi menjadi 15 kata
         $artworks->getCollection()->transform(function ($art) {
             if (!empty($art->deskripsi)) {
                 $art->deskripsi = \Illuminate\Support\Str::words($art->deskripsi, 15, '...');
@@ -79,18 +39,15 @@ class ArtworkController extends Controller
         return view('artworks.index', compact('artworks'));
     }
 
-    // ==========
-    // Form tambah
-    // ==========
+
+    // Form tambah data
     public function create()
     {
         $categories = Category::orderBy('nama_kategori')->get();
         return view('artworks.create', compact('categories'));
     }
 
-    // =================
     // Simpan data baru
-    // =================
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -100,16 +57,8 @@ class ArtworkController extends Controller
             'kategori_id'  => 'required|exists:categories,kategori_id',
         ]);
 
-        // Pastikan folder tujuan ada: public/storage/artworks
-        $this->ensureArtworksPublicDirExists();
-
-        // Simpan file langsung ke public/storage/artworks
-        $file     = $request->file('file');
-        $filename = $this->makeArtworkFilename($file);
-        $file->move($this->artworksPublicDir(), $filename);
-
-        // Simpan URL publik ke DB
-        $fileUrl = $this->publicUrlForArtwork($filename);
+        $path    = $request->file('file')->store('artworks', 'public');
+        $fileUrl = Storage::url($path);
 
         $artwork = new Artwork();
         $artwork->user_id        = Auth::id();
@@ -126,9 +75,7 @@ class ArtworkController extends Controller
             ->with('success', 'Artwork berhasil diupload.');
     }
 
-    // =========
     // Form edit
-    // =========
     public function edit(Artwork $artwork)
     {
         if ($artwork->user_id !== Auth::id()) {
@@ -139,9 +86,7 @@ class ArtworkController extends Controller
         return view('artworks.edit', compact('artwork', 'categories'));
     }
 
-    // ===========
     // Update data
-    // ===========
     public function update(Request $request, Artwork $artwork)
     {
         if ($artwork->user_id !== Auth::id()) {
@@ -164,19 +109,13 @@ class ArtworkController extends Controller
         ];
 
         if ($request->hasFile('file')) {
-            // Hapus file lama (public/storage/artworks/...)
-            $this->deleteArtworkFileByUrl($artwork->file_url);
+            if ($artwork->file_url) {
+                $oldPath = str_replace('/storage/', '', $artwork->file_url);
+                Storage::disk('public')->delete($oldPath);
+            }
 
-            // Pastikan folder tujuan ada
-            $this->ensureArtworksPublicDirExists();
-
-            // Simpan file baru
-            $file     = $request->file('file');
-            $filename = $this->makeArtworkFilename($file);
-            $file->move($this->artworksPublicDir(), $filename);
-
-            // Update URL publik
-            $data['file_url'] = $this->publicUrlForArtwork($filename);
+            $path = $request->file('file')->store('artworks', 'public');
+            $data['file_url'] = Storage::url($path);
         }
 
         $artwork->update($data);
@@ -186,17 +125,17 @@ class ArtworkController extends Controller
             ->with('success', 'Artwork berhasil diperbarui.');
     }
 
-    // ==========
     // Hapus data
-    // ==========
     public function destroy(Artwork $artwork)
     {
         if ($artwork->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses untuk menghapus artwork ini.');
         }
 
-        // Hapus file fisik (kalau ada)
-        $this->deleteArtworkFileByUrl($artwork->file_url);
+        if ($artwork->file_url) {
+            $oldPath = str_replace('/storage/', '', $artwork->file_url);
+            Storage::disk('public')->delete($oldPath);
+        }
 
         $artwork->delete();
 
@@ -205,9 +144,7 @@ class ArtworkController extends Controller
             ->with('success', 'Artwork berhasil dihapus.');
     }
 
-    // ================================
-    // Detail artwork + follow/like/bookmark
-    // ================================
+    // Detail artwork + data untuk follow / like / bookmark
     public function show(Artwork $artwork)
     {
         // 1. Increment jumlah view
@@ -237,6 +174,7 @@ class ArtworkController extends Controller
         $isAdmin   = $loginUser && $loginUser->role === 'admin';
 
         // 4. Proteksi akses berdasarkan status artwork
+        // User lain hanya boleh lihat artwork yang status = 'aktif'
         if (!in_array($artwork->status, ['aktif']) && !$isOwner && !$isAdmin) {
             abort(404);
         }
@@ -247,8 +185,6 @@ class ArtworkController extends Controller
 
         // Foto creator
         if ($creatorProf?->foto_profil) {
-            // Jika kamu juga simpan foto profil di folder publik, ini aman.
-            // Kalau foto profilmu masih pakai storage/app/public, maka ini juga perlu dipindahkan.
             $fotoCreator = asset('storage/' . $creatorProf->foto_profil);
         } elseif ($creator?->avatar) {
             $fotoCreator = $creator->avatar;
@@ -263,14 +199,14 @@ class ArtworkController extends Controller
         // 6. Like & Bookmark state
         $userHasLiked = auth()->check()
             ? Like::where('user_id', auth()->id())
-                ->where('artwork_id', $artwork->artwork_id)
-                ->exists()
+            ->where('artwork_id', $artwork->artwork_id)
+            ->exists()
             : false;
 
         $userHasBookmarked = auth()->check()
             ? Favorite::where('user_id', auth()->id())
-                ->where('artwork_id', $artwork->artwork_id)
-                ->exists()
+            ->where('artwork_id', $artwork->artwork_id)
+            ->exists()
             : false;
 
         // 7. Follow status & count
@@ -290,7 +226,8 @@ class ArtworkController extends Controller
             ->orderByDesc('tanggal');
 
         if ($isAdmin) {
-            // Admin boleh melihat semua komentar
+            // Admin boleh melihat semua komentar (aktif / ditandai / ditolak)
+            // tidak ada filter tambahan
         } else {
             if ($loginUser) {
                 $viewerId = $loginUser->user_id;
@@ -298,11 +235,13 @@ class ArtworkController extends Controller
                 $commentsQuery->where(function ($q) use ($viewerId) {
                     $q->where('status', 'aktif')
                         ->orWhere(function ($qq) use ($viewerId) {
+                            // pemilik komentar tetap melihat komentarnya yang "ditandai"
                             $qq->where('status', 'ditandai')
                                 ->where('user_id', $viewerId);
                         });
                 });
             } else {
+                // Guest: hanya komentar aktif
                 $commentsQuery->where('status', 'aktif');
             }
         }
@@ -328,15 +267,16 @@ class ArtworkController extends Controller
         ]);
     }
 
-    // ===========================
-    // Halaman statistik / insight
-    // ===========================
+
+    // Halaman statistik / insight untuk pemilik artwork
     public function statistic(Artwork $artwork)
     {
+        // Hanya pemilik yang boleh akses
         if ($artwork->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke statistik artwork ini.');
         }
 
+        // Load kategori + statistik + hitung relasi
         $artwork->load([
             'kategori',
             'stat',
@@ -346,6 +286,7 @@ class ArtworkController extends Controller
             'favorites',
         ]);
 
+        // Statistik view (dari tabel statistics)
         $stat = $artwork->stat ?? new Statistic([
             'artwork_id'       => $artwork->artwork_id,
             'jumlah_like'      => 0,
@@ -355,6 +296,7 @@ class ArtworkController extends Controller
             'jumlah_view'      => 0,
         ]);
 
+        // Hitungan interaksi dari relasi
         $likesCount     = $artwork->likes_count ?? 0;
         $commentsCount  = $artwork->comments_count ?? 0;
         $favoritesCount = $artwork->favorites_count ?? 0;
