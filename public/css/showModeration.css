@@ -1,0 +1,299 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+/* ========= LAYOUT HALAMAN LIST MODERASI ========= */
+
+body.moderation-page{
+  margin:0;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* wrapper utama mengikuti cat-wrap */
+.mod-wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+/* ========= HEADER & JUDUL ========= */
+
+.mod-header{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.mod-title{
+  margin:0;
+  font-size:32px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#f0edff;
+}
+
+.mod-subtitle{
+  margin-top:8px;
+  font-size:13px;
+  color:var(--text-sub);
+}
+
+.mod-topline{
+  width:140px;
+  height:3px;
+  background-color:var(--accent);
+  margin:12px auto 0;
+  border-radius:var(--radius-pill);
+}
+
+/* ========= TOPBAR: FILTER STATUS ========= */
+
+.mod-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:22px 0 18px;
+}
+
+/* container chip filter */
+.mod-filter-group{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+/* chip filter status */
+.mod-filter-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 14px;
+  border-radius:var(--radius-pill);
+  font-size:12px;
+  border:1px solid rgba(255,255,255,.18);
+  background:#2b2447;
+  color:var(--text-sub);
+  text-decoration:none;
+  cursor:pointer;
+  transition:var(--transition);
+}
+
+.mod-filter-chip:hover{
+  background:#352c5a;
+  color:#fff;
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+}
+
+/* chip aktif */
+.mod-filter-chip--active{
+  background:var(--accent);
+  color:#fdfdff;
+  border-color:rgba(255,255,255,.35);
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+}
+
+/* ========= STATUS PILL DI DALAM TABEL ========= */
+
+.mod-status-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 12px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* variasi warna status */
+.mod-status--ditandai{
+  background:rgba(250,204,21,.12);
+  color:#fde68a;
+  border-color:rgba(250,204,21,.45);
+}
+
+.mod-status--disetujui{
+  background:rgba(16,185,129,.16);
+  color:#6ee7b7;
+  border-color:rgba(16,185,129,.55);
+}
+
+.mod-status--ditolak{
+  background:rgba(248,113,113,.14);
+  color:#fecaca;
+  border-color:rgba(248,113,113,.55);
+}
+
+/* ========= TABEL LIST MODERASI (MIRIP showCategory.css) ========= */
+
+.mod-table-wrap{
+  margin-top:6px;
+}
+
+/* card tabel */
+.mod-table.no-card{
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:hidden;
+}
+
+/* elemen table */
+.mod-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.mod-table thead{
+  background:#2e244c;
+}
+
+.mod-table thead th{
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-main);
+  border-bottom:1px solid rgba(243,239,255,.14);
+  text-align:left;
+}
+
+.mod-table tbody tr{
+  transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+}
+
+.mod-table tbody tr:nth-child(odd){
+  background:#352a57;
+}
+
+.mod-table tbody tr:nth-child(even){
+  background:#3b3060;
+}
+
+.mod-table tbody tr:hover{
+  background:#4b3f74;
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px rgba(0,0,0,.55);
+}
+
+.mod-table tbody td{
+  padding:12px 18px;
+  font-size:13px;
+  color:var(--text-sub);
+  border-bottom:1px solid rgba(243,239,255,.12);
+  vertical-align:top;
+}
+
+/* kolom yang ingin ditebalkan */
+.mod-col-id{
+  font-weight:600;
+  color:var(--text-main);
+  font-size:13px;
+}
+
+.mod-col-target{
+  font-weight:500;
+  color:var(--text-main);
+}
+
+.mod-col-admin{
+  color:var(--text-sub);
+}
+
+/* kolom aksi */
+.mod-col-action{
+  white-space:nowrap;
+  text-align:right;
+}
+
+/* link detail */
+.mod-action-link{
+  font-size:13px;
+  font-weight:500;
+  transition:var(--transition);
+  cursor:pointer;
+  text-decoration:none;
+  color:#c7b9ff;
+}
+
+.mod-action-link:hover{
+  text-decoration:underline;
+  transform:translateY(-1px);
+}
+
+/* ========= PAGINATION CONTAINER ========= */
+
+.mod-pagination{
+  margin-top:18px;
+}
+
+/* ========= RESPONSIVE ========= */
+
+@media (max-width:900px){
+  .mod-wrap{
+    padding:24px 12px 40px;
+  }
+
+  .mod-topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .mod-filter-group{
+    width:100%;
+  }
+
+  /* stack card seperti mobile card list */
+  .mod-table thead{
+    display:none;
+  }
+
+  .mod-table,
+  .mod-table tbody,
+  .mod-table tr,
+  .mod-table td{
+    display:block;
+    width:100%;
+  }
+
+  .mod-table tbody tr{
+    margin-bottom:12px;
+    border-radius:16px;
+    overflow:hidden;
+  }
+
+  .mod-table tbody td{
+    padding:10px 14px;
+    border-bottom:1px solid rgba(243,239,255,.08);
+  }
+
+  .mod-col-id{
+    padding-top:14px;
+    font-size:14px;
+  }
+
+  .mod-col-action{
+    padding-bottom:14px;
+    text-align:left;
+    margin-top:4px;
+  }
+}

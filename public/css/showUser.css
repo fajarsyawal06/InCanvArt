@@ -1,0 +1,345 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+/* ============================================================
+   BASE PAGE LAYOUT
+   ============================================================ */
+
+body.user-show-page{
+  margin:0;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* ============================================================
+   WRAPPER UTAMA
+   ============================================================ */
+
+.usr-wrap{
+  padding:40px 24px 60px;
+}
+
+/* ============================================================
+   HEADER TITLE
+   ============================================================ */
+
+.usr-header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.usr-title{
+  margin:0;
+  font-size:30px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#f0edff;
+}
+
+.usr-subtitle{
+  margin-top:6px;
+  font-size:13px;
+  color:var(--text-sub);
+}
+
+.usr-topline{
+  width:120px;
+  height:3px;
+  background:var(--accent);
+  margin:14px auto 0;
+  border-radius:var(--radius-pill);
+}
+
+/* ============================================================
+   GRID UTAMA
+   ============================================================ */
+
+.usr-main{
+  display:grid;
+  grid-template-columns:2fr 1.4fr;
+  gap:20px;
+  margin-top:26px;
+}
+
+/* ============================================================
+   CARD COMPONENT
+   ============================================================ */
+
+.usr-card{
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  padding:20px 20px 18px;
+}
+
+.usr-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.usr-card-title{
+  margin:0;
+  font-size:16px;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.usr-card-pill{
+  font-size:11px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.32);
+  color:var(--text-sub);
+}
+
+/* ============================================================
+   DATA LIST
+   ============================================================ */
+
+.usr-meta-list{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.usr-meta-item{
+  display:flex;
+  margin-bottom:8px;
+}
+
+.usr-meta-label{
+  width:130px;
+  font-size:13px;
+  color:var(--text-sub);
+}
+
+.usr-meta-value{
+  font-size:13px;
+  color:var(--text-main);
+}
+
+/* Bio */
+
+.usr-bio{
+  margin-top:12px;
+  font-size:13px;
+  color:var(--text-sub);
+  line-height:1.55;
+  white-space:pre-line;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+
+.usr-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.usr-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 11px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:500;
+  background:rgba(0,0,0,.32);
+  color:#fff;
+}
+
+.usr-badge-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  margin-right:6px;
+}
+
+/* Status badges */
+
+.usr-badge-status-aktif{
+  background:rgba(22,163,74,.16);
+  color:#c5f7d2;
+}
+
+.usr-badge-status-aktif .usr-badge-dot{
+  background:#4ade80;
+}
+
+.usr-badge-status-nonaktif{
+  background:rgba(248,113,113,.16);
+  color:#fed7d7;
+}
+
+.usr-badge-status-nonaktif .usr-badge-dot{
+  background:#fb7185;
+}
+
+/* Role badges */
+
+.usr-badge-role-admin{
+  background:rgba(56,189,248,.16);
+  color:#bae6fd;
+}
+
+.usr-badge-role-admin .usr-badge-dot{
+  background:#38bdf8;
+}
+
+.usr-badge-role-seniman{
+  background:rgba(196,181,253,.18);
+  color:#e9ddff;
+}
+
+.usr-badge-role-seniman .usr-badge-dot{
+  background:#a855f7;
+}
+
+.usr-badge-role-pengunjung{
+  background:rgba(251,191,36,.16);
+  color:#fef3c7;
+}
+
+.usr-badge-role-pengunjung .usr-badge-dot{
+  background:#facc15;
+}
+
+/* ============================================================
+   AVATAR
+   ============================================================ */
+
+.usr-avatar-wrap{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.usr-avatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,.18);
+  background:#2b2347;
+}
+
+.usr-name-block{
+  display:flex;
+  flex-direction:column;
+}
+
+.usr-name-main{
+  font-size:16px;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.usr-name-username{
+  font-size:12px;
+  color:var(--text-sub);
+}
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+
+.usr-actions{
+  margin-top:30px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.usr-btn{
+  padding:9px 18px;
+  border-radius:var(--radius-pill);
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-decoration:none;
+  transition:var(--transition);
+  box-shadow:0 8px 22px rgba(0,0,0,.45);
+}
+
+.usr-btn-primary{
+  background:var(--accent);
+  color:#fff;
+}
+
+.usr-btn-primary:hover{
+  background:var(--accent-soft);
+  transform:translateY(-1px);
+}
+
+.usr-btn-danger{
+  background:#ef4444;
+  color:#fef2f2;
+}
+
+.usr-btn-danger:hover{
+  background:#f87171;
+  transform:translateY(-1px);
+}
+
+.usr-btn-ghost{
+  background:transparent;
+  border:1px solid rgba(255,255,255,.18);
+  color:var(--text-sub);
+}
+
+.usr-btn-ghost:hover{
+  background:rgba(0,0,0,.25);
+  color:#fff;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width:900px){
+  .usr-wrap{
+    padding:26px 14px 40px;
+  }
+
+  .usr-main{
+    grid-template-columns:1fr;
+  }
+
+  .usr-card{
+    padding:16px 16px 14px;
+  }
+
+  .usr-title{
+    font-size:24px;
+  }
+
+  .usr-meta-label{
+    width:110px;
+  }
+}

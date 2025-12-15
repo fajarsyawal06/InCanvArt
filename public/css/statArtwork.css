@@ -1,0 +1,325 @@
+:root {
+  --bg-main: #393053;
+  --bg-card: #443C68;
+  --accent: #635985;
+  --accent-soft: #7f72c7;
+  --dark: #18122B;
+  --text-main: #F5F5FF;
+  --text-sub: #D3D1E8;
+  --radius-pill: 999px;
+  --radius-xl: 22px;
+  --shadow: 0 10px 32px rgba(0, 0, 0, .40);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* SHELL & GRID LAYOUT
+.detail-shell {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background: var(--bg-main);
+} */
+
+.detail-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+/* PANEL GAMBAR KIRI */
+.art-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.06);
+  height: 82vh;
+  max-height: 880px;
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.art-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--radius-xl) - 8px);
+  background: rgba(12, 9, 22, 0.96);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 6px 20px rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.art-media {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: rgba(12,9,22,1);
+}
+
+/* KOLOM KANAN */
+.info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 92px;
+}
+
+/* CARD UTAMA */
+.info-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: var(--shadow);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* HEADER CARD: tombol kembali + title tengah */
+.info-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 40px;
+}
+
+.btn-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(23,21,46,0.9);
+  color: #e9e7ff;
+  font-size: 0.78rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  transition: 0.18s ease;
+  text-decoration: none;
+}
+
+.btn-back:hover {
+  background: rgba(66,60,110,0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+.title-wrap {
+  text-align: center;
+}
+
+.title-main {
+  font-size: 1.28rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: #f5f4ff;
+}
+
+.title-sub {
+  font-size: .78rem;
+  color: var(--accent-soft);
+  margin-top: 2px;
+}
+
+/* DIVIDER */
+.divider {
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  margin: 4px 0;
+}
+
+.divider-soft {
+  opacity: .65;
+}
+
+/* META ARTWORK (kategori & tanggal) */
+.stat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.meta-chip {
+  background: var(--dark);
+  border-radius: 999px;
+  padding: 5px 10px;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: .75rem;
+  color: var(--text-sub);
+}
+
+.meta-label {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .7rem;
+  opacity: .9;
+}
+
+.meta-value {
+  font-weight: 500;
+  color: #f5f4ff;
+}
+
+/* DESKRIPSI */
+.desc-box {
+  background: var(--dark);
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: .86rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  max-height: 140px;
+  overflow: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,.45);
+}
+
+.desc-empty {
+  font-style: italic;
+  color: var(--text-sub);
+}
+
+/* GRID STATISTIK 4 KARTU */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+
+@media (min-width: 768px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat-card {
+  padding: 10px 12px 9px;
+  border-radius: 14px;
+  background: var(--dark);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(211,209,232,0.9);
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: #fdfcff;
+  margin-bottom: 0;
+}
+
+.stat-caption {
+  font-size: 0.76rem;
+  color: var(--text-sub);
+  margin-top: 2px;
+}
+
+/* RASIO & CATATAN (2 kolom) */
+.stat-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+  .stat-split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.mini-card {
+  background: var(--dark);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.07);
+  font-size: .8rem;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.mini-title {
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #f5f4ff;
+}
+
+.mini-text {
+  margin-bottom: 4px;
+}
+
+.mini-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 4px 0;
+}
+
+.mini-list li {
+  margin-bottom: 2px;
+  color: var(--text-main);
+}
+
+.mini-highlight {
+  font-weight: 600;
+  color: var(--accent-soft);
+}
+
+.mini-note {
+  font-size: .76rem;
+  color: var(--text-sub);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+  .info-col {
+    position: static;
+  }
+  .art-panel {
+    height: clamp(420px, 58vh, 640px);
+  }
+}

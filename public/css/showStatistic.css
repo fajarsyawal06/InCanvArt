@@ -1,0 +1,369 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background-color:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+.stats-wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+/* ====== TITLE ====== */
+.stats-title{
+  margin:0;
+  text-align:center;
+  font-size:32px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#f0edff;
+  position:relative;
+  padding-bottom:18px;
+}
+
+.stats-title::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:120px;
+  height:3px;
+  background-color:var(--accent);
+  border-radius:var(--radius-pill);
+}
+
+/* ====== SECTION TITLE ====== */
+.stats-section{
+  margin-top:36px;
+}
+
+.stats-section-title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:16px;
+  color:#f4f1ff;
+}
+
+.stats-overview{
+  margin-top:40px;
+}
+
+/* ===========================================================
+   RINGKASAN GLOBAL
+   =========================================================== */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(224px,1fr));
+  gap:22px;
+}
+
+.stats-card{
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  padding:18px 22px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08);
+  transition:var(--transition);
+}
+
+.stats-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 36px rgba(0,0,0,.55);
+}
+
+.stats-card-label{
+  font-size:13px;
+  color:var(--text-sub);
+}
+
+.stats-card-value{
+  display:block;
+  margin-top:6px;
+  font-size:22px;
+  font-weight:700;
+  color:#fff;
+}
+
+/* ===========================================================
+   TREND BULANAN
+   =========================================================== */
+
+.stats-table-small{
+  font-size:12px !important;
+}
+
+.stats-monthly{
+  margin-top:55px;
+}
+
+/* ===========================================================
+   TABEL UMUM
+   =========================================================== */
+
+.stats-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:hidden;
+}
+
+.stats-table thead{
+  background:#2e244c;
+}
+
+.stats-table th,
+.stats-table td{
+  padding:10px 14px;
+  text-align:center;
+  border-bottom:1px solid rgba(243,239,255,.12);
+}
+
+.stats-table th{
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.stats-table tbody tr{
+  transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+}
+
+.stats-table tbody tr:nth-child(odd){
+  background:#352a57;
+}
+
+.stats-table tbody tr:nth-child(even){
+  background:#3b3060;
+}
+
+.stats-table tbody tr:hover{
+  background:#4b3f74;
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px rgba(0,0,0,.55);
+}
+
+.stats-table td{
+  color:var(--text-sub);
+}
+
+.stats-table tbody tr td[colspan]{
+  text-align:center;
+  padding:20px;
+}
+
+/* ===========================================================
+   KOLOM ARTWORK DALAM TABEL
+   =========================================================== */
+
+.art-info{
+  text-align:left;
+}
+
+.thumb-img{
+  width:60px;
+  height:60px;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:0 4px 14px rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.art-title{
+  font-weight:600;
+  display:block;
+  margin-bottom:2px;
+}
+
+.art-title a{
+  color:var(--text-main);
+  text-decoration:none;
+  transition:var(--transition);
+}
+
+.art-title a:hover{
+  color:#fff;
+  text-decoration:underline;
+}
+
+.art-meta{
+  font-size:.8rem;
+  color:var(--text-sub);
+}
+
+/* ===========================================================
+   DETAIL TABEL (TANPA SCROLL INTERNAL)
+   =========================================================== */
+
+.stats-main-table{
+  width:100%;
+  overflow-x:auto; /* jaga kalau tabel kepanjangan di layar kecil */
+}
+
+/* ======= PAGINATION GAYA PILL ======= */
+
+.stats-main-pagination{
+  margin-top:1.25rem;
+  display:flex;
+  justify-content:center;
+}
+
+/* nav utama */
+.stats-pagination{
+  display:flex;
+  justify-content:center;
+}
+
+/* ul */
+.stats-pagination-list{
+  display:flex;
+  align-items:center;
+  background:#1f2230;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* li */
+.stats-pagination-list li{
+  display:flex;
+}
+
+/* link / span */
+.stats-page-link{
+  min-width:52px;
+  height:32px;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  text-decoration:none;
+  color:#e5e7f5;
+  background:transparent;
+  border-right:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease;
+}
+
+/* hilangkan border kanan di elemen terakhir */
+.stats-pagination-list li:last-child .stats-page-link{
+  border-right:none;
+}
+
+/* hover (hanya untuk link aktif) */
+.stats-page-link:hover{
+  background:#2b3042;
+  color:#f9fafb;
+}
+
+/* halaman aktif */
+.stats-page-link-active{
+  background:#2f3547;
+  color:#60a5fa;
+  font-weight:600;
+}
+
+/* Previous/Next disabled */
+.stats-page-link-disabled{
+  opacity:.45;
+  cursor:default;
+  pointer-events:none;
+}
+
+/* style untuk "..." */
+.stats-page-link-dots{
+  cursor:default;
+}
+
+/* ===========================================================
+   INSIGHT CEPAT (CARD DI BAWAH TABEL)
+   =========================================================== */
+
+.insight-grid{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px;
+}
+
+.insight-card{
+  background:var(--bg-card);
+  padding:20px 20px 16px;
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.insight-title{
+  margin:0 0 12px;
+  font-size:16px;
+  font-weight:600;
+  color:#fff;
+  border-left:4px solid var(--accent);
+  padding-left:10px;
+}
+
+.insight-card ul{
+  list-style:disc;
+  padding-left:20px;
+  margin:0;
+  color:var(--text-sub);
+}
+
+.insight-card li{
+  margin-bottom:6px;
+  font-size:13px;
+}
+
+/* ===========================================================
+   RESPONSIVE
+   =========================================================== */
+
+@media (max-width:900px){
+  .stats-wrap{
+    padding:24px 12px 40px;
+  }
+
+  .stats-title{
+    font-size:24px;
+  }
+
+  .stats-table{
+    font-size:12px;
+  }
+
+  .thumb-img{
+    width:52px;
+    height:52px;
+  }
+
+  .stats-main-pagination{
+    justify-content:center;
+  }
+}

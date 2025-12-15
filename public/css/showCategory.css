@@ -1,0 +1,297 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+/* ========= LAYOUT HALAMAN (selaras create-art) ========= */
+
+body.categories-page{
+  margin:0;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* wrapper utama mengikuti lebar & center seperti create-art-wrap */
+.cat-wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+/* ========= HEADER & JUDUL (match create-art-title) ========= */
+
+.cat-header{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.cat-title{
+  margin:0;
+  font-size:32px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#f0edff;
+}
+
+.cat-topline{
+  width:120px;
+  height:3px;
+  background-color:var(--accent);
+  margin:12px auto 0;
+  border-radius:var(--radius-pill);
+}
+
+/* ========= TOPBAR: SEARCH + BUTTON TAMBAH ========= */
+
+.cat-topbar{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin:22px 0 18px;
+}
+
+/* SEARCH BOX (di-styling mirip input-pill) */
+
+.cat-search{
+  flex:1;
+  max-width:420px;
+  margin:0;
+}
+
+.cat-search-label{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  color:var(--text-sub);
+}
+
+.cat-search-field{
+  position:relative;
+}
+
+.cat-search-icon{
+  position:absolute;
+  inset-block:0;
+  inset-inline-start:14px;
+  display:flex;
+  align-items:center;
+  pointer-events:none;
+  color:var(--text-sub);
+  font-size:14px;
+}
+
+.cat-search-input{
+  width:100%;
+  padding:11px 16px 11px 40px;
+  border-radius:var(--radius-pill);
+  border:none;
+  outline:none;
+  font-size:13px;
+  background-color:var(--dark);
+  color:var(--text-main);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  transition:var(--transition);
+}
+
+.cat-search-input::placeholder{
+  color:rgba(211,209,232,.7);
+}
+
+.cat-search-input:focus{
+  box-shadow:0 0 0 1px rgba(127,114,199,.75),0 10px 24px rgba(0,0,0,.7);
+  background-color:#211a3a;
+}
+
+/* TOMBOL TAMBAH KATEGORI */
+
+.cat-add-btn{
+  padding:9px 20px;
+  border-radius:var(--radius-pill);
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+  background-color:var(--accent);
+  color:#fdfdff;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+  transition:var(--transition);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.cat-add-btn:hover{
+  background-color:var(--accent-soft);
+  transform:translateY(-1px);
+  box-shadow:0 12px 26px rgba(0,0,0,.45);
+}
+
+/* ========= TABEL (tanpa card, tapi tetap bergaya card) ========= */
+
+.cat-table.no-card{
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:hidden;
+}
+
+.cat-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.cat-table thead{
+  background:#2e244c;
+}
+
+.cat-table thead th{
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-main);
+  border-bottom:1px solid rgba(243,239,255,.14);
+  text-align:left;
+}
+
+.cat-table tbody tr{
+  transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+}
+
+.cat-table tbody tr:nth-child(odd){
+  background:#352a57;
+}
+
+.cat-table tbody tr:nth-child(even){
+  background:#3b3060;
+}
+
+.cat-table tbody tr:hover{
+  background:#4b3f74;
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px rgba(0,0,0,.55);
+}
+
+.cat-table tbody td{
+  padding:12px 18px;
+  font-size:13px;
+  color:var(--text-sub);
+  border-bottom:1px solid rgba(243,239,255,.12);
+  vertical-align:top;
+}
+
+.cat-table tbody td.cat-name{
+  font-weight:600;
+  color:var(--text-main);
+  font-size:14px;
+}
+
+.cat-table tbody td.cat-desc{
+  max-width:640px;
+  line-height:1.45;
+  white-space:normal;
+  word-wrap:break-word;
+}
+
+.cat-table tbody td.cat-action{
+  white-space:nowrap;
+  text-align:left;
+}
+
+/* ========= ACTION LINKS ========= */
+
+.cat-action-link{
+  font-size:13px;
+  font-weight:500;
+  transition:var(--transition);
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.cat-action-edit{
+  color:var(--accent-soft);
+  margin-right:12px;
+}
+
+.cat-action-delete{
+  color:#ff6b7a;
+}
+
+.cat-action-link:hover{
+  text-decoration:underline;
+  transform:translateY(-1px);
+}
+
+/* ========= RESPONSIVE ========= */
+
+@media (max-width:900px){
+  .cat-wrap{
+    padding:24px 12px 40px;
+  }
+
+  .cat-topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .cat-search{
+    max-width:100%;
+  }
+
+  .cat-add-btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  .cat-table thead{
+    display:none;
+  }
+
+  .cat-table,
+  .cat-table tbody,
+  .cat-table tr,
+  .cat-table td{
+    display:block;
+    width:100%;
+  }
+
+  .cat-table tbody tr{
+    margin-bottom:12px;
+    border-radius:16px;
+    overflow:hidden;
+  }
+
+  .cat-table tbody td{
+    padding:10px 14px;
+    border-bottom:1px solid rgba(243,239,255,.08);
+  }
+
+  .cat-table tbody td.cat-name{
+    padding-top:14px;
+    font-size:15px;
+  }
+
+  .cat-table tbody td.cat-action{
+    padding-bottom:14px;
+    text-align:left;
+    margin-top:4px;
+  }
+}

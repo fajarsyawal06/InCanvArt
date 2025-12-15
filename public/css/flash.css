@@ -1,0 +1,142 @@
+/* =======================================
+   UNIVERSAL SWEETALERT2 (FLASH THEME)
+   ======================================= */
+
+:root {
+  /* fallback jika variabel belum didefinisikan di CSS utama */
+  --bg-main: #393053;
+  --bg-card: #443C68;
+  --accent: #635985;
+  --accent-soft: #7f72c7;
+  --dark: #18122B;
+  --text-main: #F5F5FF;
+  --text-sub: #D3D1E8;
+}
+
+/* Popup utama */
+.swal2-popup {
+  background: rgba(24, 18, 43, 0.96) !important;
+  color: var(--text-main) !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(6px);
+  padding: 1.8rem 1.6rem !important;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Title dan konten */
+.swal2-title {
+  color: #f5f4ff !important;
+  font-weight: 700 !important;
+  font-size: 1.3rem !important;
+  letter-spacing: .3px;
+}
+.swal2-html-container {
+  color: var(--text-sub) !important;
+  font-size: .95rem !important;
+  margin-top: .6rem !important;
+  line-height: 1.6;
+}
+
+/* Ikon */
+.swal2-icon {
+  box-shadow: none !important;
+  border-width: 2px !important;
+  background: rgba(12, 9, 22, 0.45) !important;
+}
+.swal2-icon.swal2-success {
+  border-color: rgba(111, 207, 151, 0.3) !important;
+  color: #70e0a0 !important;
+}
+.swal2-icon.swal2-error {
+  border-color: rgba(255, 118, 117, 0.25) !important;
+  color: #ff7675 !important;
+}
+.swal2-icon.swal2-warning {
+  border-color: rgba(255, 183, 77, 0.25) !important;
+  color: #ffc86f !important;
+}
+.swal2-icon.swal2-info {
+  border-color: rgba(128, 177, 255, 0.25) !important;
+  color: #82b0ff !important;
+}
+
+/* Tombol */
+.swal2-actions {
+  margin-top: 1.2rem !important;
+  gap: 8px !important;
+}
+.swal2-confirm,
+.swal2-cancel {
+  border-radius: 999px !important;
+  padding: 8px 18px !important;
+  font-weight: 600 !important;
+  font-size: .85rem !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all .25s ease;
+}
+
+.swal2-confirm {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+.swal2-confirm:hover {
+  background: var(--accent-soft) !important;
+  transform: translateY(-1px);
+}
+
+.swal2-cancel {
+  background: var(--dark) !important;
+  color: var(--text-main) !important;
+}
+.swal2-cancel:hover {
+  background: #2a2346 !important;
+  transform: translateY(-1px);
+}
+
+/* Close button & footer */
+.swal2-close {
+  color: var(--text-sub) !important;
+  border-radius: 50% !important;
+  transition: background .25s;
+}
+.swal2-close:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.swal2-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-sub) !important;
+  font-size: .78rem;
+}
+
+/* Progress bar (untuk timer) */
+.swal2-timer-progress-bar {
+  background: var(--accent-soft) !important;
+  height: 4px !important;
+  border-radius: 999px;
+}
+
+/* Animasi lembut */
+.swal2-show {
+  animation: swalFadeIn 0.18s ease-out both;
+}
+@keyframes swalFadeIn {
+  from { transform: translateY(6px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)   scale(1);    opacity: 1; }
+}
+
+/* ===== Toast Mode ===== */
+.swal2-container.swal2-top-end > .swal2-popup {
+  border-radius: 14px !important;
+  background: rgba(24,18,43,0.94) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.55) !important;
+  font-size: .9rem !important;
+  padding: .8rem 1rem !important;
+}
+.swal2-container.swal2-top-end > .swal2-popup .swal2-title {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}

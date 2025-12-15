@@ -1,0 +1,352 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background-color:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* ====== WRAP & TITLE ====== */
+
+.users-wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+.users-title{
+  margin:0;
+  text-align:center;
+  font-size:32px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#f0edff;
+  position:relative;
+  padding-bottom:18px;
+}
+
+.users-title::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:120px;
+  height:3px;
+  background-color:var(--accent);
+  border-radius:var(--radius-pill);
+}
+
+/* ====== SECTION TITLE ====== */
+
+.users-section{
+  margin-top:32px;
+}
+
+.users-section-title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:16px;
+  color:#f4f1ff;
+}
+
+/* ===========================================================
+   FILTER & SEARCH
+   =========================================================== */
+
+.users-filter-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  align-items:flex-end;
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  padding:16px 18px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.users-filter-group{
+  display:flex;
+  flex-direction:column;
+  min-width:200px;
+  flex:1;
+}
+
+.users-filter-label{
+  font-size:12px;
+  color:var(--text-sub);
+  margin-bottom:6px;
+}
+
+.users-filter-field{
+  position:relative;
+}
+
+.users-filter-input{
+  width:100%;
+  padding:10px 14px;
+  border-radius:var(--radius-pill);
+  border:none;
+  outline:none;
+  font-size:13px;
+  background-color:var(--dark);
+  color:var(--text-main);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  transition:var(--transition);
+}
+
+.users-filter-input::placeholder{
+  color:rgba(211,209,232,.7);
+}
+
+.users-filter-input:focus{
+  box-shadow:0 0 0 1px rgba(127,114,199,.75),0 10px 24px rgba(0,0,0,.7);
+  background-color:#211a3a;
+}
+
+.users-filter-select{
+  width:100%;
+  padding:10px 14px;
+  border-radius:var(--radius-pill);
+  border:none;
+  outline:none;
+  font-size:13px;
+  background-color:var(--dark);
+  color:var(--text-main);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  transition:var(--transition);
+  appearance:none;
+}
+
+.users-filter-select:focus{
+  box-shadow:0 0 0 1px rgba(127,114,199,.75),0 10px 24px rgba(0,0,0,.7);
+  background-color:#211a3a;
+}
+
+.users-filter-actions{
+  display:flex;
+  align-items:flex-end;
+}
+
+.users-filter-btn{
+  padding:9px 22px;
+  border-radius:var(--radius-pill);
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+  background-color:var(--accent);
+  color:#fdfdff;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+  transition:var(--transition);
+  white-space:nowrap;
+}
+
+.users-filter-btn:hover{
+  background-color:var(--accent-soft);
+  transform:translateY(-1px);
+  box-shadow:0 12px 26px rgba(0,0,0,.45);
+}
+
+/* ===========================================================
+   TABEL USER
+   =========================================================== */
+
+.users-main-table{
+  width:100%;
+  overflow-x:auto;
+}
+
+.users-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:hidden;
+}
+
+.users-table thead{
+  background:#2e244c;
+}
+
+.users-table th,
+.users-table td{
+  padding:10px 14px;
+  text-align:center;
+  border-bottom:1px solid rgba(243,239,255,.12);
+}
+
+.users-table th{
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.users-table tbody tr{
+  transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+}
+
+.users-table tbody tr:nth-child(odd){
+  background:#352a57;
+}
+
+.users-table tbody tr:nth-child(even){
+  background:#3b3060;
+}
+
+.users-table tbody tr:hover{
+  background:#4b3f74;
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px rgba(0,0,0,.55);
+}
+
+.users-table td{
+  color:var(--text-sub);
+}
+
+.users-table tbody tr td[colspan]{
+  text-align:center;
+  padding:20px;
+}
+
+/* kolom username lebih menonjol */
+.user-col-username{
+  text-align:left;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+/* kolom aksi rata kiri / tengah */
+.user-col-action{
+  white-space:nowrap;
+}
+
+/* ===========================================================
+   BADGE STATUS & LINK AKSI
+   =========================================================== */
+
+.user-status-badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:500;
+}
+
+.user-status-aktif{
+  background:rgba(22,163,74,.16);
+  color:#c5f7d2;
+}
+
+.user-status-nonaktif{
+  background:rgba(248,113,113,.16);
+  color:#fed7d7;
+}
+
+.user-action-link{
+  font-size:13px;
+  font-weight:500;
+  color:#a5b4fc;
+  text-decoration:none;
+  transition:var(--transition);
+}
+
+.user-action-link:hover{
+  color:#fff;
+  text-decoration:underline;
+  transform:translateY(-1px);
+}
+
+/* ===========================================================
+   PAGINATION WRAP
+   =========================================================== */
+
+.users-main-pagination{
+  margin-top:1.25rem;
+  display:flex;
+  justify-content:center;
+}
+
+/* Komponen pagination bisa pakai class dari components.pagination
+   (seperti di showStatistic.css), jadi CSS-nya tetap dipakai ulang. */
+
+/* ===========================================================
+   RESPONSIVE
+   =========================================================== */
+
+@media (max-width:900px){
+  .users-wrap{
+    padding:24px 12px 40px;
+  }
+
+  .users-title{
+    font-size:24px;
+  }
+
+  .users-filter-bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .users-main-table{
+    font-size:12px;
+  }
+
+  .users-table thead{
+    display:none;
+  }
+
+  .users-table,
+  .users-table tbody,
+  .users-table tr,
+  .users-table td{
+    display:block;
+    width:100%;
+  }
+
+  .users-table tbody tr{
+    margin-bottom:12px;
+    border-radius:16px;
+    overflow:hidden;
+  }
+
+  .users-table td{
+    text-align:left;
+    padding:10px 14px;
+  }
+
+  .users-table td:first-child{
+    font-size:11px;
+    opacity:.8;
+  }
+
+  .user-col-username{
+    font-size:15px;
+    padding-top:4px;
+  }
+
+  .user-col-action{
+    margin-top:6px;
+  }
+}

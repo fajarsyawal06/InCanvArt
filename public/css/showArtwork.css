@@ -1,0 +1,419 @@
+:root {
+  --bg-main: #393053;
+  --bg-card: #443C68;
+  --accent: #635985;
+  --accent-soft: #7f72c7;
+  --dark: #18122B;
+  --text-main: #F5F5FF;
+  --text-sub: #D3D1E8;
+  --radius-pill: 999px;
+  --radius-xl: 22px;
+  --shadow: 0 10px 32px rgba(0, 0, 0, .40);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.detail-shell {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  padding: 24px 0 40px;
+  background: var(--bg-main);
+}
+
+/* GRID */
+.detail-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+/* PANEL GAMBAR */
+.art-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.06);
+  height: 82vh;
+  max-height: 880px;
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.art-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--radius-xl) - 8px);
+  background: rgba(12, 9, 22, 0.96);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 6px 20px rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.art-media {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: rgba(12,9,22,1);
+}
+
+/* KOLOM KANAN */
+.info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 92px;
+}
+
+/* ======================= */
+/* CREATOR BAR & HEADER    */
+/* ======================= */
+
+.creator-bar,
+.info-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: var(--shadow);
+}
+
+/* Creator bar utama: kiri avatar+nama, kanan tombol */
+.creator-bar {
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Avatar */
+.creator-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(255,255,255,.06);
+  border: 2px solid rgba(255,255,255,.9);
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,.45);
+}
+
+/* Nama */
+.creator-name-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: .9rem;
+}
+
+.creator-name { font-weight: 600; color: #f5f4ff; }
+.creator-sub { font-size: .74rem; color: var(--text-sub); opacity: .92; }
+
+/* Garis pemisah di tengah */
+.creator-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255,255,255,.18);
+  margin: 0 4px;
+}
+
+/* Wadah aksi kanan (Follow / Statistik) */
+.creator-actions {
+  margin-left: auto;     /* Dorong ke kanan */
+  display: flex;
+  align-items: center;
+}
+
+/* Jika tombol pakai form, pastikan flex */
+.creator-actions form {
+  display: flex;
+}
+
+/* Tombol Follow & Statistik (style sama) */
+.btn-follow {
+  margin-left: 0;
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.4);
+  transition: .25s;
+}
+
+.btn-follow:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+/* ================= */
+/* CARD UTAMA DETAIL */
+/* ================= */
+
+.info-card {
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* HEADER CARD – tombol di atas, judul di bawah */
+.info-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+/* Baris atas: Back (kiri) + Edit (kanan) */
+.info-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Tombol kembali */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(23,21,46,0.9);
+  color: #e9e7ff;
+  font-size: 0.78rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  transition: 0.18s ease;
+}
+
+.btn-back:hover {
+  background: rgba(66,60,110,0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+/* Tombol Edit: reuse style btn-back */
+.btn-edit {
+  text-decoration: none; /* karena <a> */
+}
+
+/* TITLE DI TENGAH */
+.title-wrap {
+  text-align: center;
+}
+
+.title-main {
+  font-size: 1.28rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: #f5f4ff;
+  word-break: break-word;
+}
+
+.title-sub {
+  font-size: .78rem;
+  color: var(--accent-soft);
+  margin-top: 2px;
+}
+
+/* DESKRIPSI */
+.desc-box {
+  background: var(--dark);
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: .86rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  max-height: 140px;
+  overflow: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,.45);
+}
+
+.divider {
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  margin: 4px 0;
+}
+
+/* KOMENTAR */
+.comment-label {
+  font-size: .82rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.comments-box {
+  background: rgba(24,18,43,.96);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: .78rem;
+  color: var(--text-sub);
+  overflow: auto;
+  max-height: 230px;
+  box-shadow: 0 5px 16px rgba(0,0,0,.45);
+}
+
+/* ACTIONS (Like, Share, Bookmark, info) */
+.actions-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-soft);
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.04);
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  transition: .25s;
+}
+
+.circle-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.55);
+}
+
+.actions-info {
+  font-size: .72rem;
+  color: var(--text-sub);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* FORM KOMENTAR */
+.comment-form-wrap {
+  display: grid;
+  grid-template-columns: minmax(0,1.9fr) auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comment-input {
+  padding: 8px 11px;
+  border-radius: 10px;
+  border: none;
+  background: var(--dark);
+  color: var(--text-main);
+  font-size: .8rem;
+}
+
+.comment-input::placeholder {
+  color: rgba(211,209,232,.6);
+}
+
+.btn-post {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,.4);
+  transition: .25s;
+}
+
+.btn-post:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.comment-user-link {
+  color: #f5f4ff;
+  font-weight: 600;
+}
+.comment-user-link:hover {
+  text-decoration: underline;
+}
+
+.moderation-banner {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 193, 7, 0.16); /* kuning lembut */
+  border: 1px solid rgba(255, 193, 7, 0.55);
+  font-size: 0.78rem;
+  color: #ffeccc;
+  line-height: 1.5;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+}
+
+.moderation-banner strong {
+  font-size: 0.82rem;
+  color: #fff7d1;
+}
+
+.moderation-reason {
+  margin-top: 4px;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.moderation-meta {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: rgba(245,245,255,0.7);
+}
+ 
+/* RESPONSIVE */
+@media (max-width:1024px) {
+  .detail-layout { grid-template-columns: 1fr; }
+  .info-col { position: static; }
+  .art-panel { height: clamp(420px, 58vh, 640px); }
+}
+
+/* SweetAlert Match */
+.swal2-dark-rounded {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.55) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(4px);
+}

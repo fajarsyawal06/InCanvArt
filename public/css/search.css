@@ -1,0 +1,237 @@
+/* =======================================================
+   SEARCH PAGE THEME – konsisten dengan halaman lain
+   ======================================================= */
+
+:root {
+  --bg-main: #393053;
+  --bg-card: #443C68;
+  --accent: #635985;
+  --accent-soft: #7f72c7;
+  --dark: #18122B;
+  --text-main: #F5F5FF;
+  --text-sub: #D3D1E8;
+  --radius-pill: 999px;
+  --radius-xl: 22px;
+  --shadow: 0 10px 32px rgba(0, 0, 0, .35);
+  --transition: 0.25s ease;
+}
+
+/* Box-sizing global – aman dan umum dipakai */
+* {
+  box-sizing: border-box;
+}
+
+/* Hanya mengatur body ketika ada class .dark */
+body.dark {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* =======================================================
+   WRAPPER & HEADER SEARCH
+   ======================================================= */
+
+.search-shell {
+  padding: 26px 0 40px;
+  min-height: calc(100vh - 64px);
+}
+
+.search-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.search-header {
+  margin-bottom: 18px;
+}
+
+.search-header-title {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  color: #f0edff;
+  margin: 0;
+}
+
+.search-header-sub {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+
+.search-header-sub span {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.search-header-line {
+  width: 120px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  margin: 10px 0 14px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .45);
+}
+
+/* =======================================================
+   TOMBOL BACK
+   ======================================================= */
+
+.search-back {
+  margin-bottom: 18px;
+}
+
+.search-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(245, 245, 255, 0.75);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background-color: rgba(24, 18, 43, 0.0);
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.search-back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.search-back-link:hover {
+  color: #ffffff;
+  background-color: rgba(68, 60, 104, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .45);
+  transform: translateY(-1px);
+}
+
+/* =======================================================
+   SECTION TITLE: "Akun" & "Artwork"
+   ======================================================= */
+
+.search-section-block {
+  margin-bottom: 26px;
+}
+
+.search-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 10px;
+  color: #f5f4ff;
+  letter-spacing: .03em;
+}
+
+.search-section-empty {
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+/* Card umum untuk blok akun */
+.search-section-card {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+}
+
+/* =======================================================
+   LIST AKUN
+   ======================================================= */
+
+.search-account-list {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Scrollbar halus hanya di list akun */
+.search-account-list::-webkit-scrollbar {
+  width: 6px;
+}
+.search-account-list::-webkit-scrollbar-track {
+  background: rgba(24, 18, 43, 0.85);
+}
+.search-account-list::-webkit-scrollbar-thumb {
+  background: rgba(127, 114, 199, 0.85);
+  border-radius: 999px;
+}
+
+.search-account-item {
+  border-radius: 12px;
+  padding-inline: 4px;
+  transition: var(--transition);
+}
+
+.search-account-item a {
+  border-radius: 12px;
+}
+
+.search-account-item:hover {
+  background-color: rgba(68, 60, 104, 0.7);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .45);
+  transform: translateY(-1px);
+}
+
+/* Avatar & teks akun */
+.search-account-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .55);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.search-account-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f5f4ff;
+}
+
+.search-account-email {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+/* =======================================================
+   GRID ARTWORK (hanya wrapper, masonry tetap dari pin.css)
+   ======================================================= */
+
+.search-artwork-wrap {
+  margin-top: 8px;
+  /* Jangan pakai display:flex/grid supaya .masonry dari pin.css tetap bekerja */
+}
+
+/* =======================================================
+   RESPONSIVE
+   ======================================================= */
+
+@media (max-width: 900px) {
+  .search-shell {
+    padding: 20px 0 32px;
+  }
+
+  .search-inner {
+    padding: 0 10px;
+  }
+
+  .search-header-title {
+    font-size: 20px;
+  }
+
+  .search-section-card {
+    padding: 12px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-back-link {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}

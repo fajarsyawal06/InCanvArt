@@ -1,0 +1,431 @@
+:root{
+  --bg-main:#393053;
+  --bg-card:#443C68;
+  --accent:#635985;
+  --accent-soft:#7f72c7;
+  --dark:#18122B;
+  --text-main:#F5F5FF;
+  --text-sub:#D3D1E8;
+  --radius-pill:999px;
+  --radius-xl:22px;
+  --shadow:0 10px 32px rgba(0,0,0,.35);
+  --transition:.25s ease;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+/* ========= LAYOUT HALAMAN DETAIL MODERASI ========= */
+
+body.moderation-detail-page{
+  margin:0;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+.mdd-wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:40px 24px 60px;
+}
+
+/* ========= LINK KEMBALI ========= */
+
+.mdd-back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  color:#c7b9ff;
+  text-decoration:none;
+  padding:7px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(24,18,43,.9);
+  border:1px solid rgba(255,255,255,.08);
+  transition:var(--transition);
+}
+
+.mdd-back-link:hover{
+  color:#fff;
+  background:#281f4b;
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+}
+
+/* ========= CARD UMUM ========= */
+
+.mdd-card{
+  margin-top:18px;
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  padding:18px 20px 18px;
+}
+
+.mdd-card:first-of-type{
+  margin-top:16px;
+}
+
+/* ========= JUDUL & SUB-JUDUL DI CARD ========= */
+
+.mdd-title{
+  margin:0 0 8px;
+  font-size:20px;
+  font-weight:600;
+  color:#fdfbff;
+}
+
+.mdd-subtext{
+  font-size:12px;
+  color:var(--text-sub);
+}
+
+/* ========= GRID INFORMASI UTAMA (DL) ========= */
+
+.mdd-info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin-top:14px;
+}
+
+.mdd-info-item dt{
+  font-size:12px;
+  font-weight:500;
+  color:var(--text-sub);
+  margin-bottom:4px;
+}
+
+.mdd-info-item dd{
+  margin:0;
+  font-size:13px;
+  color:var(--text-main);
+}
+
+.mdd-info-full{
+  grid-column:1 / -1;
+}
+
+/* ========= STATUS PILL ========= */
+
+.mdd-status-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 12px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+.mdd-status--ditandai{
+  background:rgba(250,204,21,.12);
+  color:#fde68a;
+  border-color:rgba(250,204,21,.45);
+}
+
+.mdd-status--disetujui{
+  background:rgba(16,185,129,.16);
+  color:#6ee7b7;
+  border-color:rgba(16,185,129,.55);
+}
+
+.mdd-status--ditolak{
+  background:rgba(248,113,113,.14);
+  color:#fecaca;
+  border-color:rgba(248,113,113,.55);
+}
+
+/* ========= DETAIL TARGET: GAMBAR KIRI, INFO + AKSI KANAN ========= */
+
+.mdd-target-row{
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) minmax(0,1.4fr);
+  gap:22px;
+  margin-top:16px;
+  align-items:stretch;
+}
+
+/* PANEL GAMBAR (kiri) – mirip showArtwork.css */
+.mdd-target-art-panel{
+  background:var(--bg-card);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);
+  min-height:340px;
+  max-height:620px;
+  display:grid;
+  place-items:center;
+  padding:16px;
+}
+
+.mdd-target-art-frame{
+  width:100%;
+  height:100%;
+  border-radius:calc(var(--radius-xl) - 8px);
+  background:rgba(12,9,22,.96);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 6px 20px rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.mdd-target-art-media{
+  width:100%;
+  height:100%;
+  border-radius:inherit;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-color:rgba(12,9,22,1);
+}
+
+.mdd-target-art-media img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* KOLOM INFO + AKSI (kanan) */
+.mdd-target-infoCol{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* Header judul + badge id */
+.mdd-target-header{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.mdd-target-title-main{
+  margin:0;
+  font-size:18px;
+  font-weight:600;
+  color:#fdfbff;
+}
+
+.mdd-target-badge{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  background:#2f264d;
+  color:var(--text-sub);
+  border:1px solid rgba(255,255,255,.14);
+}
+
+/* Deskripsi di panel kanan */
+.mdd-target-desc{
+  margin:0;
+  font-size:13px;
+  line-height:1.6;
+  color:var(--text-sub);
+  background:var(--dark);
+  border-radius:14px;
+  padding:10px 12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+
+/* Meta info kecil di bawah */
+.mdd-target-meta-grid{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px 16px;
+}
+
+.mdd-target-meta-item{
+  font-size:12px;
+  color:#b4addb;
+}
+
+.mdd-target-meta-label{
+  display:block;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:rgba(223,219,255,.85);
+  margin-bottom:3px;
+}
+
+.mdd-target-meta-value{
+  font-size:12px;
+}
+
+/* BLOK AKSI (UBAH STATUS + HAPUS LOG) DI KANAN */
+.mdd-target-actions{
+  margin-top:14px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.14);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.mdd-target-actions .mdd-form-group{
+  margin-bottom:10px;
+}
+
+.mdd-target-actions .mdd-btn-row{
+  justify-content:flex-end;
+}
+
+/* ========= KOMENTAR FULL LAYAR (UNTUK TARGET COMMENT) ========= */
+
+.mdd-comment-box{
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:#2f264d;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+}
+
+.mdd-comment-text{
+  margin:0;
+  font-size:14px;
+  line-height:1.7;
+  color:#fdfbff;
+}
+
+.mdd-comment-meta{
+  margin-top:8px;
+  font-size:12px;
+  color:#b4addb;
+}
+
+.mdd-comment-artwork{
+  margin-top:4px;
+  font-size:11px;
+  color:#d4d0ff;
+}
+
+/* ========= FORM UPDATE STATUS ========= */
+
+.mdd-form-group{
+  margin-bottom:14px;
+}
+
+.mdd-label{
+  display:block;
+  font-size:12px;
+  font-weight:500;
+  color:var(--text-sub);
+  margin-bottom:4px;
+}
+
+.mdd-select,
+.mdd-textarea{
+  width:100%;
+  font-size:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:#2b2447;
+  color:var(--text-main);
+  padding:8px 10px;
+  outline:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+  transition:var(--transition);
+}
+
+.mdd-select:focus,
+.mdd-textarea:focus{
+  border-color:rgba(127,114,199,.85);
+  box-shadow:0 0 0 1px rgba(127,114,199,.75),0 10px 26px rgba(0,0,0,.75);
+  background:#241d40;
+}
+
+.mdd-textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+/* ========= BUTTONS ========= */
+
+.mdd-btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:6px;
+}
+
+.mdd-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 18px;
+  border-radius:var(--radius-pill);
+  font-size:13px;
+  font-weight:500;
+  border:none;
+  cursor:pointer;
+  transition:var(--transition);
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.mdd-btn-primary{
+  background:#4f46e5;
+  color:#f9fafb;
+  box-shadow:0 8px 22px rgba(79,70,229,.55);
+}
+
+.mdd-btn-primary:hover{
+  background:#6366f1;
+  transform:translateY(-1px);
+  box-shadow:0 12px 28px rgba(79,70,229,.75);
+}
+
+.mdd-btn-danger{
+  background:#dc2626;
+  color:#fef2f2;
+  box-shadow:0 8px 22px rgba(220,38,38,.55);
+}
+
+.mdd-btn-danger:hover{
+  background:#ef4444;
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(220,38,38,.75);
+}
+
+/* ========= RESPONSIVE ========= */
+
+@media (max-width:1024px){
+  .mdd-target-row{
+    grid-template-columns:1fr;
+  }
+
+  .mdd-target-art-panel{
+    min-height:260px;
+    max-height:480px;
+  }
+
+  .mdd-target-meta-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:900px){
+  .mdd-wrap{
+    padding:24px 12px 40px;
+  }
+
+  .mdd-info-grid{
+    grid-template-columns:1fr;
+  }
+}
