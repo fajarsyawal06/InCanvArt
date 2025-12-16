@@ -53,19 +53,19 @@
           </div>
 
           @if(auth()->user()->role === 'seniman' && !empty($profile->nama_lengkap))
-            <div class="pg-center-realname">
-              {{ $profile->nama_lengkap }}
-            </div>
+          <div class="pg-center-realname">
+            {{ $profile->nama_lengkap }}
+          </div>
           @endif
         </div>
 
         {{-- Statistik --}}
         <ul class="pg-stats">
           @if($user->role === 'seniman')
-            <li class="pg-pill">
-              <span class="pg-pill-label">Jumlah posts</span>
-              <span class="pg-pill-value">{{ $artworks->total() }}</span>
-            </li>
+          <li class="pg-pill">
+            <span class="pg-pill-label">Jumlah posts</span>
+            <span class="pg-pill-value">{{ $artworks->total() }}</span>
+          </li>
           @endif
 
           <li class="pg-pill">
@@ -83,9 +83,9 @@
       {{-- KANAN --}}
       <div class="pg-right">
         @if($user->role === 'seniman')
-          <div class="pg-bio">
-            {{ $profile->bio ?: 'Deskripsi singkat user.' }}
-          </div>
+        <div class="pg-bio">
+          {{ $profile->bio ?: 'Deskripsi singkat user.' }}
+        </div>
         @endif
       </div>
 
@@ -93,17 +93,19 @@
 
     {{-- POSTINGAN --}}
     @if($user->role === 'seniman')
-      <section class="container">
-        <h2 class="pg-section-title">Postingan</h2>
-        <x-masonry :artworks="$artworks"></x-masonry>
-      </section>
+    <section class="container">
+      <h2 class="pg-section-title">Postingan</h2>
+      <x-masonry :artworks="$artworks"></x-masonry>
+    </section>
     @endif
 
   </div>
 
+  {{-- JS --}}
   <script src="{{ asset('js/pin.js') }}"></script>
   <script src="{{ asset('js/alert.js') }}"></script>
-  <x-flash></x-flash>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <x-flash></x-flash>
 </body>
 
 </html>

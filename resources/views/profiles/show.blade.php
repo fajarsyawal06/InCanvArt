@@ -212,8 +212,7 @@
   <script src="{{ asset('js/pin.js') }}"></script>
   <script src="{{ asset('js/alert.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <x-flash></x-flash>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <x-flash></x-flash>
 
 </body>
 
