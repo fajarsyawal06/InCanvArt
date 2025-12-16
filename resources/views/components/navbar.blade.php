@@ -1,6 +1,5 @@
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-[#18122B] dark:border-[#635985]">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    {{-- PARENT WAJIB relative UNTUK CENTER ABSOLUTE --}}
     <div class="relative flex items-center justify-between">
 
       {{-- KIRI: Logo --}}
@@ -15,7 +14,6 @@
 
       {{-- TENGAH --}}
       @auth
-      {{-- MODE PENGUNJUNG / SENIMAN: SEARCH BAR DI AREA TENGAH (FLEKSIBEL) --}}
       @if (auth()->user()->role === 'pengunjung' || auth()->user()->role === 'seniman')
       <div class="flex-1 flex justify-center">
         <form class="w-full max-w-2xl" action="{{ route('search.index') }}" method="GET">
@@ -64,7 +62,6 @@
       </div>
       @endif
 
-      {{-- MODE ADMIN: MENU TEPAT DI TENGAH HORIZONTAL & VERTICAL --}}
       @if (auth()->user()->role === 'admin')
       <div class="absolute inset-x-0 top-0 bottom-0 flex justify-center items-center pointer-events-none">
         <div class="flex gap-10 font-medium text-white dark:text-gray-200 pointer-events-auto">
@@ -87,15 +84,17 @@
               class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
               aria-expanded="false" data-dropdown-toggle="dropdown-user">
               <span class="sr-only">Open user menu</span>
+
               <img
                 class="rounded-full w-10 h-10 object-cover"
-                src="{{ $profile && $profile->foto_profil
-                        ? asset('storage/' . $profile->foto_profil)
+                src="{{ ($profile && $profile->foto_profil)
+                        ? asset(ltrim($profile->foto_profil, '/'))
                         : asset('images/avatar-sample.jpg') }}"
                 alt="Foto Profil"
                 loading="lazy">
             </button>
           </div>
+
           <div
             class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm
                 dark:bg-gray-700 dark:divide-gray-600"
