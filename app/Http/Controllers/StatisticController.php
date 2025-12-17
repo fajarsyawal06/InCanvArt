@@ -129,14 +129,24 @@ class StatisticController extends Controller
 
     public function exportPdf()
     {
-        // 1. DATA STATISTIK PER ARTWORK (hanya yang punya artwork)
-        $stats = Statistic::with(['artwork.user'])
-            ->whereHas('artwork')
-            ->get();
+        // Ambil semua artwork + seniman + view(stat) + count interaksi
+        $stats = Artwork::with(['user', 'stat'])
+            ->withCount(['likes', 'comments', 'favorites', 'shares'])
+            ->get()
+            ->map(function ($a) {
+                return (object) [
+                    'artwork'         => $a,
+                    'jumlah_view'     => (int) optional($a->stat)->jumlah_view ?? 0,
+                    'jumlah_like'     => (int) $a->likes_count,
+                    'jumlah_komentar' => (int) $a->comments_count,
+                    'jumlah_favorit'  => (int) $a->favorites_count,
+                    'jumlah_share'    => (int) $a->shares_count,
+                ];
+            });
 
-        // 2. RINGKASAN GLOBAL
+        // RINGKASAN GLOBAL
         $global = [
-            'total_artwork'   => Artwork::count(),
+            'total_artwork'   => $stats->count(),
             'total_view'      => $stats->sum('jumlah_view'),
             'total_like'      => $stats->sum('jumlah_like'),
             'total_comment'   => $stats->sum('jumlah_komentar'),
@@ -144,7 +154,7 @@ class StatisticController extends Controller
             'total_share'     => $stats->sum('jumlah_share'),
         ];
 
-        // 3. INSIGHT CEPAT
+        // INSIGHT CEPAT
         $insight = [
             'most_viewed'  => $stats->sortByDesc('jumlah_view')->first(),
             'most_liked'   => $stats->sortByDesc('jumlah_like')->first(),
@@ -152,7 +162,7 @@ class StatisticController extends Controller
             'most_share'   => $stats->sortByDesc('jumlah_share')->first(),
         ];
 
-        // 4. TREN BULANAN (12 bulan terakhir) – pakai tanggal_upload + join statistics
+        // TREN BULANAN (tetap boleh pakai yang kamu punya)
         $monthly = DB::table('artworks')
             ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
@@ -160,17 +170,17 @@ class StatisticController extends Controller
             DATE_FORMAT(artworks.tanggal_upload, '%M %Y')  AS month_label,
             COUNT(artworks.artwork_id)                     AS uploads,
             COALESCE(SUM(statistics.jumlah_view), 0)       AS views,
-            COALESCE(SUM(statistics.jumlah_like), 0)       AS likes,
-            COALESCE(SUM(statistics.jumlah_komentar), 0)   AS komentar,
-            COALESCE(SUM(statistics.jumlah_favorit), 0)    AS favorit,
-            COALESCE(SUM(statistics.jumlah_share), 0)      AS share
+            0 AS likes,
+            0 AS komentar,
+            0 AS favorit,
+            0 AS share
         ")
             ->groupBy('month_key', 'month_label')
             ->orderBy('month_key', 'asc')
             ->limit(12)
             ->get();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.statistic', [
+        $pdf = Pdf::loadView('pdf.statistic', [
             'stats'        => $stats,
             'global'       => $global,
             'insight'      => $insight,
@@ -178,8 +188,6 @@ class StatisticController extends Controller
             'generated_at' => now(),
         ])->setPaper('a4', 'portrait');
 
-        // return $pdf->download('Laporan-Statistik-InCanvArt-' . now()->format('Y-m-d') . '.pdf');
-        // kalau mau dibuka langsung di browser:
         return $pdf->stream('Laporan-Statistik-InCanvArt-' . now()->format('Y-m-d') . '.pdf');
     }
 }
