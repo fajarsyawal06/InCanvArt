@@ -3,7 +3,6 @@
 
 <head>
     <x-header></x-header>
-    <title>Detail User</title>
     <link rel="stylesheet" href="{{ asset('css/showUser.css') }}">
 </head>
 
@@ -15,7 +14,6 @@
 
             @php
                 // Amankan semua field profil agar selalu string saat di-echo
-
                 $profile = $user->profile ?? null;
 
                 $namaLengkap = $profile->nama_lengkap ?? null;
@@ -30,7 +28,6 @@
 
                 $bio = $profile->bio ?? null;
                 if (is_array($bio)) {
-                    // jika bio berupa array kata/kalimat, gabungkan saja
                     $bio = implode(' ', $bio);
                 }
             @endphp
@@ -163,7 +160,7 @@
                 @if($user->status === 'aktif')
                     <form action="{{ route('users.deactivate', $user->user_id) }}"
                           method="POST"
-                          onsubmit="return confirm('Nonaktifkan akun ini?');">
+                          class="js-confirm-deactivate">
                         @csrf
                         <button type="submit" class="usr-btn usr-btn-danger">
                             Nonaktifkan Akun
@@ -172,7 +169,7 @@
                 @else
                     <form action="{{ route('users.activate', $user->user_id) }}"
                           method="POST"
-                          onsubmit="return confirm('Aktifkan kembali akun ini?');">
+                          class="js-confirm-activate">
                         @csrf
                         <button type="submit" class="usr-btn usr-btn-primary">
                             Aktifkan Akun
@@ -184,9 +181,90 @@
                     Kembali ke Daftar User
                 </a>
             </div>
+
+            {{-- (OPSIONAL) SweetAlert untuk flash message sukses/error --}}
+            @if(session('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: @json(session('success')),
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    });
+                </script>
+            @endif
+
+            @if(session('error'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: @json(session('error')),
+                            showConfirmButton: true
+                        });
+                    });
+                </script>
+            @endif
+
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Nonaktifkan user
+            document.querySelectorAll('.js-confirm-deactivate').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Nonaktifkan Akun?',
+                        text: 'User ini tidak akan bisa login sampai diaktifkan kembali.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Nonaktifkan',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            // Aktifkan user
+            document.querySelectorAll('.js-confirm-activate').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Aktifkan Akun?',
+                        text: 'User akan dapat login kembali.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2563eb',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Aktifkan',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
 
 </body>
 </html>
