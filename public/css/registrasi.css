@@ -2,14 +2,14 @@
   --bg: #2f2a4a;          /* background polos */
   --card-top: #2a2348;    /* bagian atas card */
   --card-bottom: #4d4474; /* bagian bawah card */
-  --text: #f0edff;
-  --muted: #9ca3af;
+  --text: #f0edff;        /* warna teks utama */
+  --muted: #9ca3af;       /* muted */
   --shadow: 0 18px 40px rgba(0,0,0,.35);
   --shadow-soft: 0 10px 25px rgba(0,0,0,.22);
   --radius: 32px;
 }
 
-/* Agar showPassword.js bisa toggle svg */
+/* Wajib agar JS kamu bisa toggle */
 .hidden{ display:none !important; }
 
 *{
@@ -25,34 +25,34 @@ body{
   align-items:center;
   justify-content:center;
   padding: 48px 16px;
-  background: var(--bg);
+  background: var(--bg); /* polos */
 }
 
-/* Card utama */
-.auth-card{
+/* card */
+.login-card{
   width: 100%;
-  max-width: 520px; /* sedikit lebih lebar karena register lebih banyak field */
+  max-width: 440px;
   border-radius: var(--radius);
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow);
 }
 
-.auth-card__top{
-  height: 160px;
+.login-card__top{
+  height: 150px;
   background: var(--card-top);
 }
 
-.auth-card__bottom{
+.login-card__bottom{
   padding: 92px 44px 40px;
   background: var(--card-bottom);
 }
 
-/* Logo bulat overlap */
-.auth-logo{
+/* logo circle overlap */
+.login-logo{
   position:absolute;
   left:50%;
-  top: 100px;
+  top: 92px;
   transform: translateX(-50%);
   width: 88px;
   height: 88px;
@@ -64,56 +64,28 @@ body{
   justify-content:center;
 }
 
-.auth-logo::after{
+.login-logo::after{
   content:"";
   position:absolute;
-  inset: 8px;
+  inset: 2px;
   border-radius: 999px;
   border: 2px solid rgba(68,60,104,.35);
 }
 
-.auth-logo img{
-  width: 44px;
+.login-logo img{
+  width: 76px;
   height: auto;
   display:block;
 }
 
-/* Judul */
-.auth-title{
-  text-align:center;
-  color: var(--text);
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.35;
-  margin-bottom: 18px;
-}
-
-/* Alert */
-.alert{
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  margin-bottom: 14px;
-}
-.alert--success{
-  background: rgba(34,197,94,.14);
-  border: 1px solid rgba(34,197,94,.35);
-  color: rgba(240,237,255,.95);
-}
-.alert--failed{
-  background: rgba(239,68,68,.14);
-  border: 1px solid rgba(239,68,68,.35);
-  color: rgba(240,237,255,.95);
-}
-
-/* Form */
-.auth-form{
+/* form */
+.login-form{
   display:flex;
   flex-direction:column;
-  gap: 16px;
+  gap: 18px;
 }
 
-.field label{
+.login-field label{
   display:block;
   font-size: 12px;
   font-weight: 700;
@@ -122,7 +94,8 @@ body{
   letter-spacing: .2px;
 }
 
-.field input{
+/* input */
+.login-field input{
   width:100%;
   height: 44px;
   padding: 0 14px;
@@ -134,22 +107,19 @@ body{
   box-shadow: 0 2px 10px rgba(0,0,0,.10);
 }
 
-.field input::placeholder{ color:#9aa3b2; }
+.login-field input::placeholder{
+  color:#9aa3b2;
+}
 
-.field input:focus{
+.login-field input:focus{
   box-shadow: 0 0 0 4px rgba(240,237,255,.14), 0 2px 12px rgba(0,0,0,.15);
 }
 
-.field .error{
-  margin-top: 8px;
-  font-size: 12px;
-  color: #ffe1e1;
-}
-
-/* password wrapper + icon (tanpa border) */
+/* password wrap + eye icon (NO BORDER) */
 .password-wrap{
   position:relative;
 }
+
 .password-wrap input{
   padding-right: 44px;
 }
@@ -162,8 +132,8 @@ body{
   width: 28px;
   height: 28px;
 
-  border: none;
-  background: transparent;
+  border: none;            /* no border */
+  background: transparent; /* no background */
   padding: 0;
   cursor: pointer;
 
@@ -171,7 +141,7 @@ body{
   align-items:center;
   justify-content:center;
 
-  color: #2f2a4a;
+  color: #2f2a4a; /* warna ikon di atas input putih */
   opacity: .75;
   transition: opacity .2s ease, transform .15s ease;
 }
@@ -187,8 +157,8 @@ body{
   display:block;
 }
 
-/* tombol submit */
-.auth-btn{
+/* button pill */
+.login-btn{
   margin-top: 6px;
   height: 46px;
   border-radius: 999px;
@@ -201,31 +171,43 @@ body{
   transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
 
-.auth-btn:hover{
+.login-btn:hover{
   transform: translateY(-1px);
   background: rgba(240,237,255,.18);
   box-shadow: 0 10px 20px rgba(0,0,0,.18);
 }
 
-.auth-btn:active{ transform: translateY(0); }
+.login-btn:active{
+  transform: translateY(0);
+}
 
-/* link bawah */
-.auth-footer{
+/* error */
+.login-error{
+  margin-top: 8px;
+  font-size: 12px;
+  color: #ffe1e1;
+}
+
+/* footer: menyatu (NO border/pill) */
+.login-footer{
   margin-top: 18px;
   text-align:center;
   font-size: 12px;
   color: rgba(240,237,255,.90);
 }
 
-.auth-footer a{
+.login-footer a{
   color: var(--text);
   font-weight: 800;
   text-decoration: none;
 }
 
-.auth-footer a:hover{ text-decoration: underline; }
+.login-footer a:hover{
+  text-decoration: underline;
+}
 
-@media (max-width: 520px){
-  .auth-card__bottom{ padding: 88px 24px 34px; }
-  .auth-card__top{ height: 150px; }
+/* responsive */
+@media (max-width: 480px){
+  .login-card__bottom{ padding: 88px 24px 34px; }
+  .login-card__top{ height: 140px; }
 }
