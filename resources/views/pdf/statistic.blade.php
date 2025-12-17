@@ -219,10 +219,12 @@
         <tr>
             <td class="text-center">{{ $i + 1 }}</td>
             <td>{{ optional($s->artwork)->judul ?? '-' }}</td>
-            <td>{{ optional(optional($s->artwork)->user)->nama
-   ?? optional(optional($s->artwork)->user)->name
-   ?? '-' }}
+            <td>
+                {{ data_get($s, 'artwork.user.nama')
+     ?? data_get($s, 'artwork.user.name')
+     ?? '-' }}
             </td>
+
             <td class="text-right">{{ number_format($s->jumlah_view) }}</td>
             <td class="text-right">{{ number_format($s->jumlah_like) }}</td>
             <td class="text-right">{{ number_format($s->jumlah_komentar) }}</td>
