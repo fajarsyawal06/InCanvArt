@@ -277,7 +277,7 @@ body {
   font-size: .78rem;
   color: var(--text-sub);
   overflow: auto;
-  max-height: 230px;
+  height: 230px;
   box-shadow: 0 5px 16px rgba(0,0,0,.45);
 }
 
