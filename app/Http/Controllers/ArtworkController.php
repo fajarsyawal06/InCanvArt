@@ -244,26 +244,39 @@ class ArtworkController extends Controller
 
         // Catatan: ini masih pakai asset('storage/...'), pastikan foto profil juga disimpan di folder publik yg sama
         if ($creatorProf?->foto_profil) {
-            $fotoCreator = asset('storage/' . $creatorProf->foto_profil);
+            // support: "/storage/..", "storage/..", "profiles/..", "/profiles/.."
+            $path = ltrim($creatorProf->foto_profil, '/');
+
+            if (str_starts_with($path, 'storage/')) {
+                // sudah ada "storage/"
+                $fotoCreator = asset($path);
+            } elseif (str_starts_with($path, 'public/')) {
+                // kalau tersimpan "public/xxx", jadikan "storage/xxx"
+                $fotoCreator = asset('storage/' . ltrim(substr($path, 7), '/'));
+            } else {
+                // anggap relative di bawah storage
+                $fotoCreator = asset('storage/' . $path);
+            }
         } elseif ($creator?->avatar) {
             $fotoCreator = $creator->avatar;
         } else {
             $fotoCreator = asset('images/avatar-sample.jpg');
         }
 
+
         $creatorName     = $creatorProf?->nama_lengkap ?? $creator?->username ?? 'Pengguna';
         $creatorUsername = '@' . ($creator?->username ?? Str::slug($creatorName));
 
         $userHasLiked = auth()->check()
             ? Like::where('user_id', auth()->id())
-                ->where('artwork_id', $artwork->artwork_id)
-                ->exists()
+            ->where('artwork_id', $artwork->artwork_id)
+            ->exists()
             : false;
 
         $userHasBookmarked = auth()->check()
             ? Favorite::where('user_id', auth()->id())
-                ->where('artwork_id', $artwork->artwork_id)
-                ->exists()
+            ->where('artwork_id', $artwork->artwork_id)
+            ->exists()
             : false;
 
         $isFollowing     = auth()->check() ? auth()->user()->isFollowing($creator) : false;
