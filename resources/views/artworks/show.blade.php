@@ -34,7 +34,7 @@
                         {{-- Avatar --}}
                         <div class="creator-avatar"
                             style="background-image:url('{{ $artwork->user->profile && $artwork->user->profile->foto_profil
-            ? asset('storage/'.$artwork->user->profile->foto_profil)
+            ? asset(ltrim($artwork->user->profile->foto_profil, '/'))
             : asset('images/avatar-sample.jpg') }}');">
                         </div>
 
