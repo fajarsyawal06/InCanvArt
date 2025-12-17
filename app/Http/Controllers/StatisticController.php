@@ -11,7 +11,6 @@ use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\Statistic;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatisticController extends Controller
@@ -20,10 +19,13 @@ class StatisticController extends Controller
     {
         /* --------------------------------------------------------------
          * 1. DATA UTAMA (TABEL PER ARTWORK)
+         * - load user + profile agar nama seniman tampil
+         * - withCount supaya likes/comments/favorites/shares akurat
          * -------------------------------------------------------------- */
-        $artworks = Artwork::with(['user', 'kategori', 'stat'])
+        $artworks = Artwork::query()
+            ->with(['user.profile', 'kategori', 'stat'])
             ->withCount(['likes', 'shares', 'comments', 'favorites'])
-            ->orderBy('tanggal_upload', 'desc')
+            ->orderByDesc('tanggal_upload')
             ->paginate(7);
 
         /* --------------------------------------------------------------
@@ -35,10 +37,10 @@ class StatisticController extends Controller
         $totalComments  = Comment::count();
         $totalFavorites = Favorite::count();
         $totalShares    = Share::count();
-        $totalArtists   = User::where('role', 'seniman')->count();
-        $totalUsers = User::count();
-        $totalVisitors = User::where('role', 'pengunjung')->count();
 
+        $totalArtists   = User::where('role', 'seniman')->count();
+        $totalUsers     = User::count();
+        $totalVisitors  = User::where('role', 'pengunjung')->count();
 
         $totalInteraksi = $totalLikes + $totalComments + $totalFavorites + $totalShares;
 
@@ -49,52 +51,52 @@ class StatisticController extends Controller
         /* --------------------------------------------------------------
          * 3. TOP ARTWORK: LIKES, FAVORITE, VIEWS
          * -------------------------------------------------------------- */
-
-        // Top 5 Likes
-        $topByLikes = Artwork::withCount('likes')
+        $topByLikes = Artwork::query()
+            ->withCount('likes')
             ->orderByDesc('likes_count')
             ->take(5)
             ->get();
 
-        // Top 5 Favorites
-        $topByFavorites = Artwork::withCount('favorites')
+        $topByFavorites = Artwork::query()
+            ->withCount('favorites')
             ->orderByDesc('favorites_count')
             ->take(5)
             ->get();
 
-        // Top 5 Views — FIX PENTING
-        $topByViews = Artwork::with('stat')
-            ->whereHas('stat')
-            ->orderByDesc(
-                Statistic::select('jumlah_view')
-                    ->whereColumn('statistics.artwork_id', 'artworks.artwork_id') // FIX DI SINI
-                    ->limit(1)
-            )
+        // Top Views (aman pakai join + COALESCE)
+        $topByViews = Artwork::query()
+            ->with(['stat'])
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
+            ->select('artworks.*')
+            ->orderByDesc(DB::raw('COALESCE(statistics.jumlah_view, 0)'))
             ->take(5)
             ->get();
 
         /* --------------------------------------------------------------
          * 4. TOP CATEGORY
          * -------------------------------------------------------------- */
-        $topCategories = Category::withCount('artworks')
-            ->orderByDesc('artworks_count')
-            ->take(5)
-            ->get();
-
-        /* --------------------------------------------------------------
-         * 5. TOP SENIMAN
-         * -------------------------------------------------------------- */
-        $topArtists = User::where('role', 'seniman')
+        $topCategories = Category::query()
             ->withCount('artworks')
             ->orderByDesc('artworks_count')
             ->take(5)
             ->get();
 
         /* --------------------------------------------------------------
-         * 6. TREND BULANAN — FIX join PK = artwork_id
+         * 5. TOP SENIMAN (load profile supaya nama lengkap bisa dipakai)
+         * -------------------------------------------------------------- */
+        $topArtists = User::query()
+            ->where('role', 'seniman')
+            ->with(['profile'])
+            ->withCount('artworks')
+            ->orderByDesc('artworks_count')
+            ->take(5)
+            ->get();
+
+        /* --------------------------------------------------------------
+         * 6. TREND BULANAN
          * -------------------------------------------------------------- */
         $monthlyStats = DB::table('artworks')
-            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id') // FIX
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
                 DATE_FORMAT(artworks.tanggal_upload, '%Y-%m') AS month_key,
                 DATE_FORMAT(artworks.tanggal_upload, '%M %Y') AS month_label,
@@ -115,26 +117,26 @@ class StatisticController extends Controller
             'totalFavorites',
             'totalShares',
             'totalArtists',
+            'totalUsers',
+            'totalVisitors',
             'globalEngagementRate',
             'monthlyStats',
             'topByLikes',
             'topByFavorites',
             'topByViews',
             'topCategories',
-            'topArtists',
-            'totalUsers',
-            'totalVisitors'
+            'topArtists'
         ));
     }
 
     public function exportPdf()
     {
-        // 1. DATA STATISTIK PER ARTWORK (hanya yang punya artwork)
-        $stats = Statistic::with(['artwork.user'])
+        // STAT PDF: ambil statistik + artwork + user + profile
+        $stats = Statistic::query()
+            ->with(['artwork.user.profile', 'artwork.kategori'])
             ->whereHas('artwork')
             ->get();
 
-        // 2. RINGKASAN GLOBAL
         $global = [
             'total_artwork'   => Artwork::count(),
             'total_view'      => $stats->sum('jumlah_view'),
@@ -144,7 +146,6 @@ class StatisticController extends Controller
             'total_share'     => $stats->sum('jumlah_share'),
         ];
 
-        // 3. INSIGHT CEPAT
         $insight = [
             'most_viewed'  => $stats->sortByDesc('jumlah_view')->first(),
             'most_liked'   => $stats->sortByDesc('jumlah_like')->first(),
@@ -152,25 +153,24 @@ class StatisticController extends Controller
             'most_share'   => $stats->sortByDesc('jumlah_share')->first(),
         ];
 
-        // 4. TREN BULANAN (12 bulan terakhir) – pakai tanggal_upload + join statistics
         $monthly = DB::table('artworks')
             ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
-            DATE_FORMAT(artworks.tanggal_upload, '%Y-%m')  AS month_key,
-            DATE_FORMAT(artworks.tanggal_upload, '%M %Y')  AS month_label,
-            COUNT(artworks.artwork_id)                     AS uploads,
-            COALESCE(SUM(statistics.jumlah_view), 0)       AS views,
-            COALESCE(SUM(statistics.jumlah_like), 0)       AS likes,
-            COALESCE(SUM(statistics.jumlah_komentar), 0)   AS komentar,
-            COALESCE(SUM(statistics.jumlah_favorit), 0)    AS favorit,
-            COALESCE(SUM(statistics.jumlah_share), 0)      AS share
-        ")
+                DATE_FORMAT(artworks.tanggal_upload, '%Y-%m')  AS month_key,
+                DATE_FORMAT(artworks.tanggal_upload, '%M %Y')  AS month_label,
+                COUNT(artworks.artwork_id)                     AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0)       AS views,
+                COALESCE(SUM(statistics.jumlah_like), 0)       AS likes,
+                COALESCE(SUM(statistics.jumlah_komentar), 0)   AS komentar,
+                COALESCE(SUM(statistics.jumlah_favorit), 0)    AS favorit,
+                COALESCE(SUM(statistics.jumlah_share), 0)      AS share
+            ")
             ->groupBy('month_key', 'month_label')
             ->orderBy('month_key', 'asc')
             ->limit(12)
             ->get();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.statistic', [
+        $pdf = Pdf::loadView('pdf.statistic', [
             'stats'        => $stats,
             'global'       => $global,
             'insight'      => $insight,
@@ -178,8 +178,6 @@ class StatisticController extends Controller
             'generated_at' => now(),
         ])->setPaper('a4', 'portrait');
 
-        // return $pdf->download('Laporan-Statistik-InCanvArt-' . now()->format('Y-m-d') . '.pdf');
-        // kalau mau dibuka langsung di browser:
         return $pdf->stream('Laporan-Statistik-InCanvArt-' . now()->format('Y-m-d') . '.pdf');
     }
 }
