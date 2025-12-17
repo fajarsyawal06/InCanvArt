@@ -1,26 +1,16 @@
-/* =========================
-   LOGIN PAGE (PURE CSS)
-   Palette from your ref:
-   - Primary: #443C68
-   - Text: #f0edff
-   - Muted: #9ca3af
-   - Tag/glass: rgba(240,237,255,.10)
-========================= */
-
 :root{
-  --bg: #2f2a4a;              /* background gelap */
-  --card: #443C68;            /* warna utama dari referensi */
-  --card-top: #342c56;        /* turunan gelap */
-  --card-bottom: #4d4474;     /* turunan terang */
-  --text: #f0edff;            /* teks utama */
-  --muted: #9ca3af;           /* teks muted */
-  --glass: rgba(240,237,255,.10);
-  --glass-2: rgba(240,237,255,.18);
-  --stroke: rgba(240,237,255,.25);
+  --bg: #2f2a4a;          /* background polos */
+  --card-top: #2a2348;    /* bagian atas card */
+  --card-bottom: #4d4474; /* bagian bawah card */
+  --text: #f0edff;        /* warna teks utama */
+  --muted: #9ca3af;       /* muted */
   --shadow: 0 18px 40px rgba(0,0,0,.35);
   --shadow-soft: 0 10px 25px rgba(0,0,0,.22);
   --radius: 32px;
 }
+
+/* Wajib agar JS kamu bisa toggle */
+.hidden{ display:none !important; }
 
 *{
   margin:0;
@@ -35,13 +25,10 @@ body{
   align-items:center;
   justify-content:center;
   padding: 48px 16px;
-  background:
-    radial-gradient(1200px 500px at 50% -10%, rgba(240,237,255,.12), transparent 55%),
-    radial-gradient(900px 400px at 50% 120%, rgba(240,237,255,.08), transparent 55%),
-    var(--bg);
+  background: var(--bg); /* polos */
 }
 
-/* card wrapper */
+/* card */
 .login-card{
   width: 100%;
   max-width: 440px;
@@ -49,18 +36,16 @@ body{
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow);
-  transform: translateZ(0);
 }
 
-/* 2 tone section */
 .login-card__top{
   height: 150px;
-  background: linear-gradient(180deg, var(--card-top), #2a2348);
+  background: var(--card-top);
 }
 
 .login-card__bottom{
   padding: 92px 44px 40px;
-  background: linear-gradient(180deg, #3c3363 0%, var(--card-bottom) 55%, #4a4171 100%);
+  background: var(--card-bottom);
 }
 
 /* logo circle overlap */
@@ -115,7 +100,7 @@ body{
   height: 44px;
   padding: 0 14px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,.08);
+  border: none;
   background: #ffffff;
   color: #1f2937;
   outline: none;
@@ -127,11 +112,10 @@ body{
 }
 
 .login-field input:focus{
-  border-color: rgba(240,237,255,.45);
   box-shadow: 0 0 0 4px rgba(240,237,255,.14), 0 2px 12px rgba(0,0,0,.15);
 }
 
-/* password + eye button */
+/* password wrap + eye icon (NO BORDER) */
 .password-wrap{
   position:relative;
 }
@@ -145,23 +129,32 @@ body{
   right: 10px;
   top:50%;
   transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid rgba(31,41,55,.10);
-  background: rgba(255,255,255,.85);
-  cursor:pointer;
+  width: 28px;
+  height: 28px;
+
+  border: none;            /* no border */
+  background: transparent; /* no background */
+  padding: 0;
+  cursor: pointer;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#4b5563;
-  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+
+  color: #2f2a4a; /* warna ikon di atas input putih */
+  opacity: .75;
+  transition: opacity .2s ease, transform .15s ease;
 }
 
 .password-wrap button:hover{
+  opacity: 1;
   transform: translateY(-50%) translateY(-1px);
-  background: #fff;
-  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+}
+
+.password-wrap svg{
+  width: 18px;
+  height: 18px;
+  display:block;
 }
 
 /* button pill */
@@ -169,13 +162,12 @@ body{
   margin-top: 6px;
   height: 46px;
   border-radius: 999px;
-  border: 1px solid rgba(240,237,255,.18);
-  background: rgba(240,237,255,.10);
+  border: none;
+  background: rgba(240,237,255,.12);
   color: var(--text);
   font-weight: 800;
   letter-spacing: .3px;
   cursor:pointer;
-  backdrop-filter: saturate(140%);
   transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
 
@@ -196,7 +188,7 @@ body{
   color: #ffe1e1;
 }
 
-/* footer */
+/* footer: menyatu (NO border/pill) */
 .login-footer{
   margin-top: 18px;
   text-align:center;
@@ -208,17 +200,10 @@ body{
   color: var(--text);
   font-weight: 800;
   text-decoration: none;
-  padding: .25rem .6rem;
-  border-radius: 999px;
-  background: var(--glass);
-  border: 1px solid var(--stroke);
-  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
 
 .login-footer a:hover{
-  transform: translateY(-1px);
-  background: var(--glass-2);
-  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+  text-decoration: underline;
 }
 
 /* responsive */
