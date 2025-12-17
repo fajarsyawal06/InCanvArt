@@ -32,11 +32,8 @@
                         class="creator-link flex items-center gap-3">
 
                         {{-- Avatar --}}
-                        <div class="creator-avatar"
-                            style="background-image:url('{{ $artwork->user->profile && $artwork->user->profile->foto_profil
-            ? asset(ltrim($artwork->user->profile->foto_profil, '/'))
-            : asset('images/avatar-sample.jpg') }}');">
-                        </div>
+                        <div class="creator-avatar" style="background-image:url('{{ $creatorBg }}');"></div>
+
 
                         {{-- Nama Ditukar --}}
                         <div class="creator-name-wrap">
