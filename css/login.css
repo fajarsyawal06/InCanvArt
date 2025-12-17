@@ -1,0 +1,154 @@
+/* RESET DASAR */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* BACKGROUND HALAMAN */
+body {
+  min-height: 100vh;
+  background: #2f2a4a; /* ungu gelap */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CARD LOGIN */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* BAGIAN ATAS */
+.login-card-top {
+  height: 140px;
+  background: #004aad;
+}
+
+/* BAGIAN BAWAH */
+.login-card-bottom {
+  background: #38b6ff;
+  padding: 90px 40px 40px;
+}
+
+/* LOGO BULAT */
+.login-logo-wrapper {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 110px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.login-logo-wrapper img {
+  width: 60px;
+  height: auto;
+}
+
+/* FORM */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* LABEL */
+.login-form label {
+  color: #ffffff;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* INPUT */
+.login-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.login-form input:focus {
+  outline: 3px solid rgba(0, 74, 173, 0.4);
+}
+
+/* PASSWORD WRAPPER */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #555;
+}
+
+/* ERROR */
+.login-error {
+  font-size: 13px;
+  color: #ffe1e1;
+  margin-top: 4px;
+}
+
+/* BUTTON */
+.login-btn {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #004aad;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.login-btn:hover {
+  background: #00307a;
+}
+
+/* FOOTER LINK */
+.login-footer {
+  margin-top: 26px;
+  text-align: center;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.login-footer a {
+  color: #002b63;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .login-card-bottom {
+    padding: 80px 24px 32px;
+  }
+}
