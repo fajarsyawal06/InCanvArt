@@ -40,16 +40,8 @@
             color: #555;
         }
 
-        .mb-8 {
-            margin-bottom: 8px;
-        }
-
         .mb-12 {
             margin-bottom: 12px;
-        }
-
-        .mb-16 {
-            margin-bottom: 16px;
         }
 
         .text-right {
@@ -76,21 +68,11 @@
             background-color: #f0f0f0;
             font-weight: bold;
         }
-
-        .no-border {
-            border: none;
-        }
-
-        .no-border td,
-        .no-border th {
-            border: none;
-        }
     </style>
 </head>
 
 <body>
 
-    {{-- HEADER --}}
     <h1>Laporan Statistik InCanvArt</h1>
     <p class="small mb-12">
         Tanggal generate: {{ $generated_at->format('d/m/Y H:i') }}<br>
@@ -130,6 +112,17 @@
         </tr>
     </table>
 
+    {{-- Helper untuk nama seniman --}}
+    @php
+    $artistName = function ($obj) {
+    return data_get($obj, 'artwork.user.profile.nama_lengkap')
+    ?? data_get($obj, 'artwork.user.nama') {{-- kalau suatu saat kamu punya kolom ini --}}
+    ?? data_get($obj, 'artwork.user.name') {{-- kalau suatu saat kamu pakai default laravel --}}
+    ?? data_get($obj, 'artwork.user.username') {{-- ini yang paling cocok dengan modelmu sekarang --}}
+    ?? '-';
+    };
+    @endphp
+
     {{-- 2. INSIGHT CEPAT --}}
     <h2>2. Insight Cepat</h2>
     <table>
@@ -143,8 +136,8 @@
         @if($insight['most_viewed'])
         <tr>
             <td>View Tertinggi</td>
-            <td>{{ optional($insight['most_viewed']->artwork)->judul ?? '-' }}</td>
-            <td>{{ optional(optional($insight['most_viewed']->artwork)->user)->nama ?? '-' }}</td>
+            <td>{{ data_get($insight['most_viewed'], 'artwork.judul') ?? '-' }}</td>
+            <td>{{ $artistName($insight['most_viewed']) }}</td>
             <td class="text-right">{{ number_format($insight['most_viewed']->jumlah_view) }}</td>
         </tr>
         @endif
@@ -152,8 +145,8 @@
         @if($insight['most_liked'])
         <tr>
             <td>Like Tertinggi</td>
-            <td>{{ optional($insight['most_liked']->artwork)->judul ?? '-' }}</td>
-            <td>{{ optional(optional($insight['most_liked']->artwork)->user)->nama ?? '-' }}</td>
+            <td>{{ data_get($insight['most_liked'], 'artwork.judul') ?? '-' }}</td>
+            <td>{{ $artistName($insight['most_liked']) }}</td>
             <td class="text-right">{{ number_format($insight['most_liked']->jumlah_like) }}</td>
         </tr>
         @endif
@@ -161,8 +154,8 @@
         @if($insight['most_comment'])
         <tr>
             <td>Komentar Terbanyak</td>
-            <td>{{ optional($insight['most_comment']->artwork)->judul ?? '-' }}</td>
-            <td>{{ optional(optional($insight['most_comment']->artwork)->user)->nama ?? '-' }}</td>
+            <td>{{ data_get($insight['most_comment'], 'artwork.judul') ?? '-' }}</td>
+            <td>{{ $artistName($insight['most_comment']) }}</td>
             <td class="text-right">{{ number_format($insight['most_comment']->jumlah_komentar) }}</td>
         </tr>
         @endif
@@ -170,8 +163,8 @@
         @if($insight['most_share'])
         <tr>
             <td>Share Terbanyak</td>
-            <td>{{ optional($insight['most_share']->artwork)->judul ?? '-' }}</td>
-            <td>{{ optional(optional($insight['most_share']->artwork)->user)->nama ?? '-' }}</td>
+            <td>{{ data_get($insight['most_share'], 'artwork.judul') ?? '-' }}</td>
+            <td>{{ $artistName($insight['most_share']) }}</td>
             <td class="text-right">{{ number_format($insight['most_share']->jumlah_share) }}</td>
         </tr>
         @endif
@@ -215,16 +208,12 @@
             <th class="text-right">Favorit</th>
             <th class="text-right">Share</th>
         </tr>
+
         @foreach($stats as $i => $s)
         <tr>
             <td class="text-center">{{ $i + 1 }}</td>
-            <td>{{ optional($s->artwork)->judul ?? '-' }}</td>
-            <td>
-                {{ data_get($s, 'artwork.user.nama')
-     ?? data_get($s, 'artwork.user.name')
-     ?? '-' }}
-            </td>
-
+            <td>{{ data_get($s, 'artwork.judul') ?? '-' }}</td>
+            <td>{{ $artistName($s) }}</td>
             <td class="text-right">{{ number_format($s->jumlah_view) }}</td>
             <td class="text-right">{{ number_format($s->jumlah_like) }}</td>
             <td class="text-right">{{ number_format($s->jumlah_komentar) }}</td>
@@ -234,9 +223,8 @@
         @endforeach
     </table>
 
-    <p class="small mt-12">
-        Laporan ini dihasilkan otomatis dari sistem InCanvArt dan dapat digunakan sebagai
-        bahan monitoring performa galeri digital.
+    <p class="small">
+        Laporan ini dihasilkan otomatis dari sistem InCanvArt dan dapat digunakan sebagai bahan monitoring performa galeri digital.
     </p>
 
 </body>

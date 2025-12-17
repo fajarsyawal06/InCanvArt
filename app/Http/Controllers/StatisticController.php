@@ -129,9 +129,15 @@ class StatisticController extends Controller
 
     public function exportPdf()
     {
-        // 1) BENTUK DATA STATISTIK (WAJIB PALING ATAS)
-        $stats = Artwork::with(['user', 'stat'])
+        /**
+         * DATA PER ARTWORK
+         * - Seniman: dari user (username / profile)
+         * - Interaksi: dari relasi counts (likes/comments/favorites/shares)
+         * - View: dari tabel statistics via relasi stat
+         */
+        $stats = Artwork::with(['user.profile', 'stat'])
             ->withCount(['likes', 'comments', 'favorites', 'shares'])
+            ->orderBy('tanggal_upload', 'desc')
             ->get()
             ->map(function ($a) {
                 return (object) [
@@ -144,10 +150,7 @@ class StatisticController extends Controller
                 ];
             });
 
-        // Kalau mau debug, TARUH DI SINI (bukan di atas)
-        // dd($stats->take(3));
-
-        // 2) RINGKASAN GLOBAL
+        // RINGKASAN GLOBAL
         $global = [
             'total_artwork'   => $stats->count(),
             'total_view'      => $stats->sum('jumlah_view'),
@@ -157,7 +160,7 @@ class StatisticController extends Controller
             'total_share'     => $stats->sum('jumlah_share'),
         ];
 
-        // 3) INSIGHT CEPAT
+        // INSIGHT CEPAT
         $insight = [
             'most_viewed'  => $stats->sortByDesc('jumlah_view')->first(),
             'most_liked'   => $stats->sortByDesc('jumlah_like')->first(),
@@ -165,14 +168,19 @@ class StatisticController extends Controller
             'most_share'   => $stats->sortByDesc('jumlah_share')->first(),
         ];
 
-        // 4) TREN BULANAN (views masih dari statistics)
+        /**
+         * TREN BULANAN (12 bulan terakhir)
+         * Catatan: views kita ambil dari statistics (join).
+         * Untuk likes/komentar/favorit/share per bulan butuh join ke tabel masing-masing berdasarkan created_at.
+         * Untuk sekarang: keep yang stabil dulu.
+         */
         $monthly = DB::table('artworks')
             ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
-            DATE_FORMAT(artworks.tanggal_upload, '%Y-%m')  AS month_key,
-            DATE_FORMAT(artworks.tanggal_upload, '%M %Y')  AS month_label,
-            COUNT(artworks.artwork_id)                     AS uploads,
-            COALESCE(SUM(statistics.jumlah_view), 0)       AS views,
+            DATE_FORMAT(artworks.tanggal_upload, '%Y-%m') AS month_key,
+            DATE_FORMAT(artworks.tanggal_upload, '%M %Y') AS month_label,
+            COUNT(artworks.artwork_id) AS uploads,
+            COALESCE(SUM(statistics.jumlah_view), 0) AS views,
             0 AS likes,
             0 AS komentar,
             0 AS favorit,
