@@ -20,9 +20,9 @@
 
         <div class="login-card__bottom">
             <div class="auth-header">
-                <h2 class="auth-title">Registrasi Akun</h2>
+                <h2 class="auth-title">Masuk Akun</h2>
                 <p class="auth-subtitle">
-                    Selamat datang di Galeri Online, silakan lengkapi data Anda
+                    Selamat datang di Galeri Online, silakan melakukan proses Login
                 </p>
             </div>
             <form class="login-form" action="{{ route('login.submit') }}" method="post">
