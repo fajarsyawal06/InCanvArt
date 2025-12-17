@@ -57,7 +57,7 @@
                         @php
                         $profile = $user->profile ?? null;
                         $avatar = $profile && $profile->foto_profil
-                        ? asset('storage/' . $profile->foto_profil)
+                        ? asset(ltrim($profile->foto_profil, '/'))
                         : asset('images/avatar-sample.jpg');
 
                         // pakai user_id kalau ada, fallback ke id jika beda skema
