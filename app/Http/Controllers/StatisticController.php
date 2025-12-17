@@ -131,33 +131,34 @@ class StatisticController extends Controller
 
     public function exportPdf()
     {
-        // Ambil ARTWORK + user(profile) + stat(view) + hitung interaksi dari tabel asli
-        $artworks = Artwork::query()
+        // Ambil artwork + user(profile) + kategori + view(stat)
+        // Hitung like/comment/favorite/share dari tabel asli pakai withCount
+        $stats = \App\Models\Artwork::query()
             ->with(['user.profile', 'kategori', 'stat'])
             ->withCount(['likes', 'comments', 'favorites', 'shares'])
             ->orderByDesc('tanggal_upload')
             ->get();
 
-        // RINGKASAN GLOBAL (ambil dari hasil withCount + view dari statistics)
+        // Ringkasan global
         $global = [
-            'total_artwork'  => $artworks->count(),
-            'total_view'     => $artworks->sum(fn($a) => (int) ($a->stat->jumlah_view ?? 0)),
-            'total_like'     => $artworks->sum(fn($a) => (int) ($a->likes_count ?? 0)),
-            'total_comment'  => $artworks->sum(fn($a) => (int) ($a->comments_count ?? 0)),
-            'total_favorite' => $artworks->sum(fn($a) => (int) ($a->favorites_count ?? 0)),
-            'total_share'    => $artworks->sum(fn($a) => (int) ($a->shares_count ?? 0)),
+            'total_artwork'  => $stats->count(),
+            'total_view'     => $stats->sum(fn($a) => (int) ($a->stat->jumlah_view ?? 0)),
+            'total_like'     => $stats->sum(fn($a) => (int) ($a->likes_count ?? 0)),
+            'total_comment'  => $stats->sum(fn($a) => (int) ($a->comments_count ?? 0)),
+            'total_favorite' => $stats->sum(fn($a) => (int) ($a->favorites_count ?? 0)),
+            'total_share'    => $stats->sum(fn($a) => (int) ($a->shares_count ?? 0)),
         ];
 
-        // INSIGHT CEPAT (berdasarkan data real)
+        // Insight cepat
         $insight = [
-            'most_viewed'  => $artworks->sortByDesc(fn($a) => (int) ($a->stat->jumlah_view ?? 0))->first(),
-            'most_liked'   => $artworks->sortByDesc(fn($a) => (int) ($a->likes_count ?? 0))->first(),
-            'most_comment' => $artworks->sortByDesc(fn($a) => (int) ($a->comments_count ?? 0))->first(),
-            'most_share'   => $artworks->sortByDesc(fn($a) => (int) ($a->shares_count ?? 0))->first(),
+            'most_viewed'  => $stats->sortByDesc(fn($a) => (int) ($a->stat->jumlah_view ?? 0))->first(),
+            'most_liked'   => $stats->sortByDesc(fn($a) => (int) ($a->likes_count ?? 0))->first(),
+            'most_comment' => $stats->sortByDesc(fn($a) => (int) ($a->comments_count ?? 0))->first(),
+            'most_share'   => $stats->sortByDesc(fn($a) => (int) ($a->shares_count ?? 0))->first(),
         ];
 
-        // TREN BULANAN (12 bulan terakhir) – hitung via collection biar akurat (hindari JOIN duplikasi)
-        $monthly = $artworks
+        // Tren bulanan 12 bulan terakhir (pakai collection biar tidak dobel hitung karena join)
+        $monthly = $stats
             ->groupBy(fn($a) => \Carbon\Carbon::parse($a->tanggal_upload)->format('Y-m'))
             ->map(function ($items, $monthKey) {
                 $label = \Carbon\Carbon::createFromFormat('Y-m', $monthKey)->translatedFormat('F Y');
@@ -177,12 +178,8 @@ class StatisticController extends Controller
             ->take(-12)
             ->values();
 
-        // IMPORTANT:
-        // - 'stats' di view PDF kamu sebelumnya adalah collection Statistic.
-        // - Sekarang kita kirim ARTWORK langsung agar Like/Komentar/Share terbaca benar.
-        // Pastikan pdf.statistic memakai $stats sebagai daftar item (artwork).
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.statistic', [
-            'stats'        => $artworks, // sekarang isinya artwork
+            'stats'        => $stats,      // ini ARTWORK collection
             'global'       => $global,
             'insight'      => $insight,
             'monthly'      => $monthly,
