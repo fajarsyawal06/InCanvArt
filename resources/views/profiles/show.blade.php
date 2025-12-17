@@ -18,7 +18,7 @@
     {{-- COVER PROFIL (CREATOR) --}}
     <div class="pg-cover"
       style="--cover:url('{{ $creatorProfile && $creatorProfile->foto_cover
-            ? asset('storage/'.$creatorProfile->foto_cover)
+            ? asset(ltrim($creatorProfile->foto_cover, '/'))
             : asset('images/bgDashboard.png') }}');">
     </div>
 
