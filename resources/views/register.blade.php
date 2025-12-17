@@ -21,15 +21,14 @@
             <img src="{{ asset('images/logoincanvart.png') }}" alt="Logo InCanvArt">
         </div>
 
-        <div class="auth-header">
-            <h2 class="auth-title">Registrasi Akun</h2>
-            <p class="auth-subtitle">
-                Selamat datang di Galeri Online, silakan lengkapi data Anda
-            </p>
-        </div>
-        
         <div class="login-card__bottom">
             <form class="login-form" action="{{ route('register.submit') }}" method="post">
+                <div class="auth-header">
+                    <h2 class="auth-title">Registrasi Akun</h2>
+                    <p class="auth-subtitle">
+                        Selamat datang di Galeri Online, silakan lengkapi data Anda
+                    </p>
+                </div>
                 @csrf
 
                 <!-- Username -->
