@@ -23,7 +23,7 @@ class SearchController extends Controller
         $users = User::query()
             ->where(function ($query) use ($q) {
                 $query->where('username', 'LIKE', '%' . $q . '%')
-                      ->orWhere('email', 'LIKE', '%' . $q . '%');
+                    ->orWhere('email', 'LIKE', '%' . $q . '%');
             })
             ->take(10)
             ->get();
@@ -35,7 +35,7 @@ class SearchController extends Controller
             ->visibleFor(Auth::user()) // scope di model Artwork
             ->where(function ($query) use ($q) {
                 $query->where('judul', 'LIKE', "%{$q}%")
-                      ->orWhere('deskripsi', 'LIKE', "%{$q}%");
+                    ->orWhere('deskripsi', 'LIKE', "%{$q}%");
             })
             ->orderByDesc('tanggal_upload')
             ->paginate(24);
@@ -62,34 +62,43 @@ class SearchController extends Controller
             return response()->json(['users' => []]);
         }
 
-        $users = User::with('profile') // sesuaikan jika nama relasi berbeda
+        $users = User::with('profile')
             ->where(function ($query) use ($q) {
                 $query->where('username', 'LIKE', '%' . $q . '%')
-                      ->orWhere('email', 'LIKE', '%' . $q . '%');
+                    ->orWhere('email', 'LIKE', '%' . $q . '%');
             })
             ->orderBy('username')
             ->take(10)
             ->get();
 
         $results = $users->map(function ($user) {
-            $profile = $user->profile ?? null;
+            $profile = $user->profile;
 
-            $avatar = $profile && $profile->foto_profil
-                ? asset('storage/' . $profile->foto_profil)
-                : asset('images/avatar-sample.jpg');
+            $avatar = asset('images/avatar-sample.jpg');
+            if ($profile?->foto_profil) {
+                $path = ltrim($profile->foto_profil, '/');
+
+                if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+                    $avatar = $path;
+                } elseif (str_starts_with($path, 'storage/')) {
+                    $avatar = asset($path);
+                } else {
+                    $avatar = asset('storage/' . $path);
+                }
+            }
+
+            $id = $user->user_id ?? $user->id;
 
             return [
-                'id'          => $user->user_id ?? $user->id,
+                'id'          => $id,
                 'username'    => $user->username,
                 'email'       => $user->email,
                 'avatar'      => $avatar,
-                'profile_url' => route('profiles.show', $user->user_id ?? $user->id),
-                'bio'         => optional($profile)->bio ?? '',
+                'profile_url' => route('profiles.show', ['user' => $id]),
+                'bio'         => $profile->bio ?? '',
             ];
         });
 
-        return response()->json([
-            'users' => $results,
-        ]);
+        return response()->json(['users' => $results]);
     }
 }
