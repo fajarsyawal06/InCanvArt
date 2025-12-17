@@ -129,23 +129,14 @@ class StatisticController extends Controller
 
     public function exportPdf()
     {
-        dd(
-            $stats->take(3)->map(fn($s) => [
-                'judul' => data_get($s, 'artwork.judul'),
-                'user'  => data_get($s, 'artwork.user'),
-                'nama'  => data_get($s, 'artwork.user.nama'),
-                'name'  => data_get($s, 'artwork.user.name'),
-            ])
-        );
-
-        // Ambil semua artwork + seniman + view(stat) + count interaksi
+        // 1) BENTUK DATA STATISTIK (WAJIB PALING ATAS)
         $stats = Artwork::with(['user', 'stat'])
             ->withCount(['likes', 'comments', 'favorites', 'shares'])
             ->get()
             ->map(function ($a) {
                 return (object) [
                     'artwork'         => $a,
-                    'jumlah_view'     => (int) optional($a->stat)->jumlah_view ?? 0,
+                    'jumlah_view'     => (int) (optional($a->stat)->jumlah_view ?? 0),
                     'jumlah_like'     => (int) $a->likes_count,
                     'jumlah_komentar' => (int) $a->comments_count,
                     'jumlah_favorit'  => (int) $a->favorites_count,
@@ -153,7 +144,10 @@ class StatisticController extends Controller
                 ];
             });
 
-        // RINGKASAN GLOBAL
+        // Kalau mau debug, TARUH DI SINI (bukan di atas)
+        // dd($stats->take(3));
+
+        // 2) RINGKASAN GLOBAL
         $global = [
             'total_artwork'   => $stats->count(),
             'total_view'      => $stats->sum('jumlah_view'),
@@ -163,7 +157,7 @@ class StatisticController extends Controller
             'total_share'     => $stats->sum('jumlah_share'),
         ];
 
-        // INSIGHT CEPAT
+        // 3) INSIGHT CEPAT
         $insight = [
             'most_viewed'  => $stats->sortByDesc('jumlah_view')->first(),
             'most_liked'   => $stats->sortByDesc('jumlah_like')->first(),
@@ -171,7 +165,7 @@ class StatisticController extends Controller
             'most_share'   => $stats->sortByDesc('jumlah_share')->first(),
         ];
 
-        // TREN BULANAN (tetap boleh pakai yang kamu punya)
+        // 4) TREN BULANAN (views masih dari statistics)
         $monthly = DB::table('artworks')
             ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
