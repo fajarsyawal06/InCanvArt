@@ -231,7 +231,7 @@
 
                             {{-- SHARE BUTTON --}}
                             @auth
-                            <form action="{{ route('artworks.share', ['artwork' => $artwork->artwork_id]) }}"
+                            <form action="{{ route('artworks.share', ['artwork' => $artwork->slug]) }}"
                                 method="POST"
                                 class="inline-block">
                                 @csrf
