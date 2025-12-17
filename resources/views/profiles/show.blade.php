@@ -29,7 +29,7 @@
       <div class="pg-left">
         <div class="pg-avatar-wrap">
           <img src="{{ $creatorProfile && $creatorProfile->foto_profil
-                ? asset('storage/'.$creatorProfile->foto_profil)
+                ? asset(ltrim($creatorProfile->foto_profil, '/'))
                 : asset('images/avatar-sample.jpg') }}"
             alt="Foto profil creator"
             class="pg-avatar"
