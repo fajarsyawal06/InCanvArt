@@ -79,7 +79,6 @@
         Total data statistik: {{ $stats->count() }} baris
     </p>
 
-    {{-- 1. RINGKASAN GLOBAL --}}
     <h2>1. Ringkasan Global</h2>
     <table>
         <tr>
@@ -112,18 +111,16 @@
         </tr>
     </table>
 
-    {{-- Helper untuk nama seniman --}}
     @php
     $artistName = function ($obj) {
     return data_get($obj, 'artwork.user.profile.nama_lengkap')
-    ?? data_get($obj, 'artwork.user.nama') {{-- kalau suatu saat kamu punya kolom ini --}}
-    ?? data_get($obj, 'artwork.user.name') {{-- kalau suatu saat kamu pakai default laravel --}}
-    ?? data_get($obj, 'artwork.user.username') {{-- ini yang paling cocok dengan modelmu sekarang --}}
-    ?? '-';
+    ?: data_get($obj, 'artwork.user.nama')
+    ?: data_get($obj, 'artwork.user.name')
+    ?: data_get($obj, 'artwork.user.username')
+    ?: '-';
     };
     @endphp
 
-    {{-- 2. INSIGHT CEPAT --}}
     <h2>2. Insight Cepat</h2>
     <table>
         <tr>
@@ -170,7 +167,6 @@
         @endif
     </table>
 
-    {{-- 3. TREN BULANAN --}}
     <h2>3. Tren Bulanan (12 Bulan Terakhir)</h2>
     <table>
         <tr>
@@ -195,7 +191,6 @@
         @endforeach
     </table>
 
-    {{-- 4. DETAIL PER ARTWORK --}}
     <h2>4. Detail Statistik per Artwork</h2>
     <table>
         <tr>
