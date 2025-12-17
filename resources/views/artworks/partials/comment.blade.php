@@ -95,7 +95,7 @@
         </a>
 
         <form id="report-{{ $comment->comment_id }}"
-            action="{{ route('admin.comments.report', $comment->comment_id) }}"
+            action="{{ route('comments.report', $comment->comment_id) }}"
             method="POST" style="display:none;">
             @csrf
             <input type="hidden" name="alasan" value="">
