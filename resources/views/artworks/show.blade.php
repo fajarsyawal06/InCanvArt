@@ -115,10 +115,10 @@
                     @if ($moderation->status === 'ditandai')
                     <strong>Artwork Anda sedang ditinjau.</strong><br>
                     Telah ada laporan terkait konten ini dan saat ini sedang dalam proses peninjauan admin.
-                    @elseif ($moderation->status === 'ditolak')
+                    @elseif ($moderation->status === 'disetujui')
                     <strong>Artwork Anda melanggar kebijakan.</strong><br>
                     Konten ini telah ditandai melanggar aturan dan mungkin disembunyikan dari pengunjung.
-                    @elseif ($moderation->status === 'disetujui')
+                    @elseif ($moderation->status === 'ditolak')
                     <strong>Laporan terhadap artwork ini telah ditolak.</strong><br>
                     Admin telah meninjau laporan dan menyatakan konten ini tetap dapat ditampilkan.
                     @endif
