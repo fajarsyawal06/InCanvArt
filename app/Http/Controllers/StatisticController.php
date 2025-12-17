@@ -129,6 +129,15 @@ class StatisticController extends Controller
 
     public function exportPdf()
     {
+        dd(
+            $stats->take(3)->map(fn($s) => [
+                'judul' => data_get($s, 'artwork.judul'),
+                'user'  => data_get($s, 'artwork.user'),
+                'nama'  => data_get($s, 'artwork.user.nama'),
+                'name'  => data_get($s, 'artwork.user.name'),
+            ])
+        );
+
         // Ambil semua artwork + seniman + view(stat) + count interaksi
         $stats = Artwork::with(['user', 'stat'])
             ->withCount(['likes', 'comments', 'favorites', 'shares'])
