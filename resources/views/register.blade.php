@@ -6,7 +6,7 @@
   <title>Register | InCanvArt</title>
 
   <!-- PAKAI CSS LOGIN YANG SAMA -->
-  <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/loginregister.css') }}" />
 
   <!-- JS TETAP -->
   <script src="{{ asset('js/showPassword.js') }}" defer></script>
