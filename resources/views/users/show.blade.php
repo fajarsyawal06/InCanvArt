@@ -118,7 +118,7 @@
                     <div class="usr-avatar-wrap">
                         <img
                             src="{{ $profile && $profile->foto_profil
-                                    ? asset('storage/'.$profile->foto_profil)
+                                    ? asset(ltrim($profile->foto_profil, '/'))
                                     : asset('images/avatar-sample.jpg') }}"
                             alt="Avatar user"
                             class="usr-avatar">
