@@ -11,7 +11,6 @@ use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\Statistic;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class StatisticController extends Controller
@@ -35,10 +34,10 @@ class StatisticController extends Controller
         $totalComments  = Comment::count();
         $totalFavorites = Favorite::count();
         $totalShares    = Share::count();
-        $totalArtists   = User::where('role', 'seniman')->count();
-        $totalUsers = User::count();
-        $totalVisitors = User::where('role', 'pengunjung')->count();
 
+        $totalArtists   = User::where('role', 'seniman')->count();
+        $totalUsers     = User::count();
+        $totalVisitors  = User::where('role', 'pengunjung')->count();
 
         $totalInteraksi = $totalLikes + $totalComments + $totalFavorites + $totalShares;
 
@@ -62,12 +61,12 @@ class StatisticController extends Controller
             ->take(5)
             ->get();
 
-        // Top 5 Views — FIX PENTING
+        // Top 5 Views — FIX (subquery orderByDesc)
         $topByViews = Artwork::with('stat')
             ->whereHas('stat')
             ->orderByDesc(
                 Statistic::select('jumlah_view')
-                    ->whereColumn('statistics.artwork_id', 'artworks.artwork_id') // FIX DI SINI
+                    ->whereColumn('statistics.artwork_id', 'artworks.artwork_id')
                     ->limit(1)
             )
             ->take(5)
@@ -91,10 +90,26 @@ class StatisticController extends Controller
             ->get();
 
         /* --------------------------------------------------------------
-         * 6. TREND BULANAN — FIX join PK = artwork_id
+         * 6. TREND HARIAN (30 hari terakhir)
+         * -------------------------------------------------------------- */
+        $dailyStats = DB::table('artworks')
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
+            ->selectRaw("
+                DATE(artworks.tanggal_upload) AS day_key,
+                DATE_FORMAT(artworks.tanggal_upload, '%d %M %Y') AS day_label,
+                COUNT(artworks.artwork_id) AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0) AS views
+            ")
+            ->groupBy('day_key', 'day_label')
+            ->orderBy('day_key', 'desc')
+            ->limit(30)
+            ->get();
+
+        /* --------------------------------------------------------------
+         * 7. TREND BULANAN (12 bulan terakhir)
          * -------------------------------------------------------------- */
         $monthlyStats = DB::table('artworks')
-            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id') // FIX
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
                 DATE_FORMAT(artworks.tanggal_upload, '%Y-%m') AS month_key,
                 DATE_FORMAT(artworks.tanggal_upload, '%M %Y') AS month_label,
@@ -106,6 +121,22 @@ class StatisticController extends Controller
             ->limit(12)
             ->get();
 
+        /* --------------------------------------------------------------
+         * 8. TREND TAHUNAN (5 tahun terakhir)
+         * -------------------------------------------------------------- */
+        $yearlyStats = DB::table('artworks')
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
+            ->selectRaw("
+                YEAR(artworks.tanggal_upload) AS year_key,
+                CONCAT(YEAR(artworks.tanggal_upload)) AS year_label,
+                COUNT(artworks.artwork_id) AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0) AS views
+            ")
+            ->groupBy('year_key', 'year_label')
+            ->orderBy('year_key', 'desc')
+            ->limit(5)
+            ->get();
+
         return view('statistics.index', compact(
             'artworks',
             'totalArtworks',
@@ -115,15 +146,17 @@ class StatisticController extends Controller
             'totalFavorites',
             'totalShares',
             'totalArtists',
+            'totalUsers',
+            'totalVisitors',
             'globalEngagementRate',
+            'dailyStats',
             'monthlyStats',
+            'yearlyStats',
             'topByLikes',
             'topByFavorites',
             'topByViews',
             'topCategories',
-            'topArtists',
-            'totalUsers',
-            'totalVisitors'
+            'topArtists'
         ));
     }
 
@@ -152,12 +185,12 @@ class StatisticController extends Controller
 
         // RINGKASAN GLOBAL
         $global = [
-            'total_artwork'   => $stats->count(),
-            'total_view'      => $stats->sum('jumlah_view'),
-            'total_like'      => $stats->sum('jumlah_like'),
-            'total_comment'   => $stats->sum('jumlah_komentar'),
-            'total_favorite'  => $stats->sum('jumlah_favorit'),
-            'total_share'     => $stats->sum('jumlah_share'),
+            'total_artwork'  => $stats->count(),
+            'total_view'     => $stats->sum('jumlah_view'),
+            'total_like'     => $stats->sum('jumlah_like'),
+            'total_comment'  => $stats->sum('jumlah_komentar'),
+            'total_favorite' => $stats->sum('jumlah_favorit'),
+            'total_share'    => $stats->sum('jumlah_share'),
         ];
 
         // INSIGHT CEPAT
@@ -169,26 +202,64 @@ class StatisticController extends Controller
         ];
 
         /**
-         * TREN BULANAN (12 bulan terakhir)
-         * Catatan: views kita ambil dari statistics (join).
-         * Untuk likes/komentar/favorit/share per bulan butuh join ke tabel masing-masing berdasarkan created_at.
-         * Untuk sekarang: keep yang stabil dulu.
+         * TREND BULANAN (12 bulan terakhir) - ASC biar enak dibaca
+         * (likes/komentar/favorit/share diset 0 dulu seperti versi kamu)
          */
         $monthly = DB::table('artworks')
             ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
             ->selectRaw("
-            DATE_FORMAT(artworks.tanggal_upload, '%Y-%m') AS month_key,
-            DATE_FORMAT(artworks.tanggal_upload, '%M %Y') AS month_label,
-            COUNT(artworks.artwork_id) AS uploads,
-            COALESCE(SUM(statistics.jumlah_view), 0) AS views,
-            0 AS likes,
-            0 AS komentar,
-            0 AS favorit,
-            0 AS share
-        ")
+                DATE_FORMAT(artworks.tanggal_upload, '%Y-%m') AS month_key,
+                DATE_FORMAT(artworks.tanggal_upload, '%M %Y') AS month_label,
+                COUNT(artworks.artwork_id) AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0) AS views,
+                0 AS likes,
+                0 AS komentar,
+                0 AS favorit,
+                0 AS share
+            ")
             ->groupBy('month_key', 'month_label')
             ->orderBy('month_key', 'asc')
             ->limit(12)
+            ->get();
+
+        /**
+         * TREND HARIAN (30 hari terakhir) - ASC biar enak dibaca
+         */
+        $daily = DB::table('artworks')
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
+            ->selectRaw("
+                DATE(artworks.tanggal_upload) AS day_key,
+                DATE_FORMAT(artworks.tanggal_upload, '%d %M %Y') AS day_label,
+                COUNT(artworks.artwork_id) AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0) AS views,
+                0 AS likes,
+                0 AS komentar,
+                0 AS favorit,
+                0 AS share
+            ")
+            ->groupBy('day_key', 'day_label')
+            ->orderBy('day_key', 'asc')
+            ->limit(30)
+            ->get();
+
+        /**
+         * TREND TAHUNAN (5 tahun terakhir) - ASC biar enak dibaca
+         */
+        $yearly = DB::table('artworks')
+            ->leftJoin('statistics', 'artworks.artwork_id', '=', 'statistics.artwork_id')
+            ->selectRaw("
+                YEAR(artworks.tanggal_upload) AS year_key,
+                CONCAT(YEAR(artworks.tanggal_upload)) AS year_label,
+                COUNT(artworks.artwork_id) AS uploads,
+                COALESCE(SUM(statistics.jumlah_view), 0) AS views,
+                0 AS likes,
+                0 AS komentar,
+                0 AS favorit,
+                0 AS share
+            ")
+            ->groupBy('year_key', 'year_label')
+            ->orderBy('year_key', 'asc')
+            ->limit(5)
             ->get();
 
         $pdf = Pdf::loadView('pdf.statistic', [
@@ -196,6 +267,8 @@ class StatisticController extends Controller
             'global'       => $global,
             'insight'      => $insight,
             'monthly'      => $monthly,
+            'daily'        => $daily,
+            'yearly'       => $yearly,
             'generated_at' => now(),
         ])->setPaper('a4', 'portrait');
 
