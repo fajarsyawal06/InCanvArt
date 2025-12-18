@@ -22,6 +22,13 @@
                     Selamat datang di Galeri Online, silakan melakukan proses Login
                 </p>
             </div>
+
+            @if (session('success'))
+            <div class="login-success">
+                {{ session('success') }}
+            </div>
+            @endif
+
             <form class="login-form" action="{{ route('login.submit') }}" method="post">
                 @csrf
 

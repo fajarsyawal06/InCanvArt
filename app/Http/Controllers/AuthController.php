@@ -57,7 +57,8 @@ class AuthController extends Controller
 
         Mail::to($data->email)->send(new VerifyEmail($data, $data->token));
 
-        return redirect()->route('login.lihat');
+        return redirect()->route('login.lihat')
+        ->with('Success', 'Registrasi berhasil. Silakan verifikasi akun terlebih dahulu melalui email Anda.');
     }
     public function loginLihat()
     {
