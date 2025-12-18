@@ -31,7 +31,7 @@
                             <p class="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Bebaskan imajinasimu di kanvas digital tanpa batas. InCanvArt adalah aplikasi untuk seniman digital yang menghadirkan ruang kerja luas, alat kreatif intuitif, dan komunitas inspiratif. Buat, bagikan, dan jelajahi karya seni Anda — semua dalam satu platform.</p>
                             <div class="mt-10 flex items-center justify-center gap-x-6">
                                 <a href="{{ route('artworks.index') }}" class="rounded-md bg-[#18122B] px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-[#443C68] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Jelajahi</a>
-                                <a href="#" class="text-sm/6 font-semibold text-white">Learn more <span aria-hidden="true">→</span></a>
+                                <a href="{{ route('artworks.index') }}" class="text-sm/6 font-semibold text-white">Nikmatilah setiap karya <span aria-hidden="true">→</span></a>
                             </div>
                         </div>
                     </div>
