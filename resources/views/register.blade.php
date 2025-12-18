@@ -26,7 +26,7 @@
                     Selamat datang di Galeri Online, silakan lengkapi data Anda
                 </p>
             </div>
-            <form class="login-form" action="{{ route('register.submit') }}" method="post"
+            <form class="login-form" action="{{ route('register.submit') }}" method="post">
                 @csrf
 
                 <!-- Username -->
