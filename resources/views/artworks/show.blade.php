@@ -224,7 +224,7 @@
                                 </svg>
                             </button>
                             @else
-                            <a class="circle-btn" href="{{ route('login') }}" title="Masuk untuk like">
+                            <a class="circle-btn" href="{{ route('login.lihat') }}" title="Masuk untuk like">
                                 🤍
                             </a>
                             @endauth
