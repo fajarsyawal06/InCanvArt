@@ -12,13 +12,14 @@
   --container: 1200px;
 }
 
-/* Reset dasar */
+/* =========================================================
+   RESET + BASE
+   ========================================================= */
 html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-    sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background-color: var(--c-bg);
 }
 
@@ -29,7 +30,9 @@ body {
   padding: 0 24px;
 }
 
-/* ===== COVER PROFIL ===== */
+/* =========================================================
+   COVER PROFIL
+   ========================================================= */
 .pg-cover {
   aspect-ratio: 4 / 1;
   width: 100%;
@@ -40,7 +43,9 @@ body {
   background-color: #18122b;
 }
 
-/* ===== CARD PROFIL : 3 KOLUM ===== */
+/* =========================================================
+   CARD PROFIL : 3 KOLUM
+   ========================================================= */
 .pg-identity {
   position: relative;
   margin: -90px auto 22px;
@@ -55,7 +60,9 @@ body {
   color: var(--c-text);
 }
 
-/* ===== KOLUM KIRI : AVATAR + EDIT ===== */
+/* =========================================================
+   KOLUM KIRI : AVATAR + EDIT
+   ========================================================= */
 .pg-left {
   width: 230px;
   flex-shrink: 0;
@@ -88,7 +95,7 @@ body {
   align-items: center;
 }
 
-/* Tombol Edit profil */
+/* Tombol */
 .pg-btn {
   padding: 9px 24px;
   border-radius: var(--radius-pill);
@@ -117,7 +124,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* ===== KOLUM TENGAH : NAMA + SOSIAL + STATS ===== */
+/* =========================================================
+   KOLUM TENGAH : NAMA + SOSIAL + STATS
+   ========================================================= */
 .pg-center {
   flex: 1.2;
   display: flex;
@@ -125,7 +134,7 @@ body {
   gap: 10px;
 }
 
-/* Header nama (tetap kiri, di kanan avatar) */
+/* Header nama */
 .pg-center-header {
   display: flex;
   flex-direction: column;
@@ -135,7 +144,7 @@ body {
 .pg-center-name-row {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* nama & badge tetap di kiri kolom tengah */
+  justify-content: flex-start;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -152,7 +161,7 @@ body {
   color: var(--c-sub);
 }
 
-/* Badge role di samping nama */
+/* Badge role */
 .pg-badge {
   display: inline-flex;
   align-items: center;
@@ -165,11 +174,13 @@ body {
   gap: 4px;
 }
 
-/* Sosial media (dipusatkan di kolom tengah) */
+/* =========================================================
+   SOSIAL MEDIA (Instagram / X / Facebook)
+   ========================================================= */
 .pg-social-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;   /* center */
+  justify-content: center; /* center */
   gap: 10px 16px;
   margin-top: 4px;
 }
@@ -198,7 +209,9 @@ body {
   transform: translateY(-1px);
 }
 
-/* Stats (dipusatkan di kolom tengah) */
+/* =========================================================
+   STATS
+   ========================================================= */
 .pg-stats {
   width: 100%;
   list-style: none;
@@ -206,7 +219,7 @@ body {
   padding: 0;
   display: flex;
   gap: 30px;
-  justify-content: center;   /* center */
+  justify-content: center; /* center */
   flex-wrap: wrap;
 }
 
@@ -240,7 +253,9 @@ body {
   margin-top: 4px;
 }
 
-/* ===== KOLUM KANAN : BIO DALAM CARD ===== */
+/* =========================================================
+   KOLUM KANAN : BIO DALAM CARD
+   ========================================================= */
 .pg-right {
   flex: 1;
   display: flex;
@@ -258,7 +273,9 @@ body {
   color: var(--c-text);
 }
 
-/* PANEL UPGRADE (untuk pengunjung) */
+/* =========================================================
+   PANEL UPGRADE (untuk pengunjung)
+   ========================================================= */
 .pg-upgrade-panel {
   width: 100%;
   background: var(--c-card-soft);
@@ -301,7 +318,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* ===== SECTION POSTINGAN ===== */
+/* =========================================================
+   SECTION POSTINGAN
+   ========================================================= */
 .pg-section-title {
   text-align: center;
   margin: 26px 0 14px;
@@ -324,7 +343,9 @@ body {
   margin-bottom: 40px;
 }
 
-/* ===== RESPONSIVE ===== */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 @media (max-width: 1000px) {
   .pg-identity {
     flex-direction: column;
