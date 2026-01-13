@@ -286,10 +286,93 @@ body{
   margin-top:1.25rem;
   display:flex;
   justify-content:center;
+  width:100%;
 }
 
-/* Komponen pagination bisa pakai class dari components.pagination
-   (seperti di showStatistic.css), jadi CSS-nya tetap dipakai ulang. */
+/* ===========================================================
+   PAGINATION (PAKAI STYLE STATISTIC: STATS-*)
+   =========================================================== */
+
+/* nav */
+.stats-pagination{
+  display:flex;
+  justify-content:center;
+  width:100%;
+}
+
+/* ul */
+.stats-pagination-list{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+
+  list-style:none;
+  margin:0;
+  padding:0;
+
+  background:#1f2230;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* li */
+.stats-pagination-list li{
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+}
+
+/* link / span */
+.stats-page-link{
+  min-width:52px;
+  height:32px;
+  padding:0 16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:13px;
+  text-decoration:none;
+  color:#e5e7f5;
+
+  background:transparent;
+  border-right:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease;
+}
+
+/* hilangkan border kanan di elemen terakhir */
+.stats-pagination-list li:last-child .stats-page-link{
+  border-right:none;
+}
+
+/* hover */
+.stats-page-link:hover{
+  background:#2b3042;
+  color:#f9fafb;
+}
+
+/* halaman aktif */
+.stats-page-link-active{
+  background:#2f3547;
+  color:#60a5fa;
+  font-weight:600;
+}
+
+/* disabled */
+.stats-page-link-disabled{
+  opacity:.45;
+  cursor:default;
+  pointer-events:none;
+}
+
+/* dots */
+.stats-page-link-dots{
+  cursor:default;
+}
 
 /* ===========================================================
    RESPONSIVE
@@ -348,5 +431,23 @@ body{
 
   .user-col-action{
     margin-top:6px;
+  }
+
+  /* pagination biar tidak kepotong di layar kecil */
+  .stats-pagination-list{
+    flex-wrap:wrap;
+    border-radius:18px;
+    padding:6px;
+    gap:6px;
+    background:#1f2230;
+  }
+
+  .stats-page-link{
+    border-right:none;
+    min-width:44px;
+    height:30px;
+    padding:0 12px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:999px;
   }
 }
